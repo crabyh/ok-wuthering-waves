@@ -187,6 +187,21 @@ class TestRecorder(unittest.TestCase):
         self.assertFalse(r.add(rec2))  # identical content -> deduped
         self.assertEqual(len(r), 1)
 
+    def test_dedup_persists_across_reload(self):
+        import os
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, "echoes.json")
+            r1 = EchoRecorder(out_path=path)
+            self.assertTrue(r1.add(parse_equipment_frame(spearback_items())))
+            # a fresh recorder (simulating a restart / new browsing session)
+            # loads the existing file and must not re-add the same echo.
+            r2 = EchoRecorder(out_path=path)
+            self.assertEqual(len(r2), 1)
+            self.assertFalse(r2.is_new(parse_equipment_frame(spearback_items())))
+            self.assertFalse(r2.add(parse_equipment_frame(spearback_items())))
+            self.assertEqual(len(r2), 1)
+
     def test_atomic_save_roundtrip(self):
         import json
         import tempfile

@@ -75,14 +75,22 @@ class EchoRecord:
         return d
 
     def signature(self) -> tuple:
-        """Content key for de-duplication (no identical echoes exist in game)."""
-        return (
-            self.echo or self.name_zh,
-            self.type,
-            self.stat,
-            self.echo_set,
-            tuple(sorted(self.substats)),
-        )
+        """Content key for de-duplication (no identical echoes exist in game).
+
+        Computed from the optimizer dict only (no name_zh) so it can be
+        reconstructed from a saved echoes_export.json on the next run.
+        """
+        return signature_from_dict(self.to_optimizer_dict())
+
+
+def signature_from_dict(d: dict) -> tuple:
+    """De-dup signature from an optimizer echo dict (for loading existing JSON)."""
+    subs = tuple(sorted(
+        (d.get(f"echoSubStatsType{i}"), d.get(f"echoSubStatsValue{i}"))
+        for i in range(1, 6)
+        if d.get(f"echoSubStatsType{i}") is not None
+    ))
+    return (d.get("echo"), d.get("type"), d.get("stat"), d.get("echoSet"), subs)
 
 
 def parse_value(value_str: str) -> float:

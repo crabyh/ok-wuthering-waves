@@ -10,20 +10,45 @@ import json
 import os
 import tempfile
 
-from src.echo_export.parser import EchoRecord
+from src.echo_export.parser import EchoRecord, signature_from_dict
 
 
 class EchoRecorder:
+    """De-duplicating echo store. Records are kept as optimizer dicts.
+
+    On init it LOADS any existing ``out_path`` JSON and seeds the de-dup set, so
+    re-browsing the echo list (within a run or across restarts) never produces
+    duplicates and never overwrites previously-collected echoes.
+    """
+
     def __init__(self, out_path: str | None = None):
         self.out_path = out_path
         self._seen: set[tuple] = set()
-        self._records: list[EchoRecord] = []
+        self._records: list[dict] = []
+        if out_path and os.path.exists(out_path):
+            self._load()
+
+    def _load(self) -> None:
+        try:
+            with open(self.out_path, encoding="utf-8") as f:
+                data = json.load(f)
+        except (OSError, json.JSONDecodeError):
+            return
+        if not isinstance(data, list):
+            return
+        for d in data:
+            if not isinstance(d, dict):
+                continue
+            sig = signature_from_dict(d)
+            if sig not in self._seen:
+                self._seen.add(sig)
+                self._records.append(d)
 
     def __len__(self) -> int:
         return len(self._records)
 
     @property
-    def records(self) -> list[EchoRecord]:
+    def records(self) -> list[dict]:
         return list(self._records)
 
     def is_new(self, record: EchoRecord) -> bool:
@@ -35,13 +60,13 @@ class EchoRecorder:
         if sig in self._seen:
             return False
         self._seen.add(sig)
-        self._records.append(record)
+        self._records.append(record.to_optimizer_dict())
         if self.out_path:
             self.save()
         return True
 
     def to_list(self) -> list[dict]:
-        return [r.to_optimizer_dict() for r in self._records]
+        return list(self._records)
 
     def to_json(self, indent: int | None = 2) -> str:
         return json.dumps(self.to_list(), ensure_ascii=False, indent=indent)

@@ -71,13 +71,22 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
             self._shot_dir = os.path.join(
                 os.path.dirname(out), "echo_export_screenshots"
             )
-            self._unknown_count = 0
-            self._shot_count = 0
+            # continue numbering from existing files so re-runs don't overwrite
+            # screenshots from a previous session.
+            self._unknown_count = self._count_pngs(self._unknown_dir)
+            self._shot_count = self._count_pngs(self._shot_dir)
             self.info_set("Output", self._out_path)
-            self.info_set("Recorded", 0)
+            self.info_set("Recorded", len(self._recorder))
             self.info_set("Unrecognized", 0)
             self.info_set("Status", "monitoring")
         return self._recorder
+
+    @staticmethod
+    def _count_pngs(folder) -> int:
+        try:
+            return len([f for f in os.listdir(folder) if f.lower().endswith(".png")])
+        except OSError:
+            return 0
 
     @staticmethod
     def _safe(part) -> str:
