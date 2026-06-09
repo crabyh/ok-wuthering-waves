@@ -1130,3 +1130,11 @@ msgstr "麗貝卡"
 
 msgid "Lucilla"
 msgstr "洛瑟菈"
+
+msgid "Export Echoes"
+msgstr "導出聲骸到優化器"
+
+msgid ""
+"Browse +25 echoes on the echo equipment page; new ones are auto-recorded to "
+"a JSON file importable by the optimizer."
+msgstr "在聲骸裝配介面瀏覽+25聲骸，新聲骸將自動記錄為優化器可匯入的JSON檔案。"

@@ -28,10 +28,10 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.name = "导出声骸到优化器(声骸装配界面/Export Echoes)"
+        # Canonical English name/description; localized via i18n .po/.mo (tr()).
+        self.name = "Export Echoes"
         self.description = (
-            "在声骸装配界面用手柄浏览+25声骸, 程序自动记录为优化器可导入的JSON. "
-            "Open the echo equipment page and browse +25 echoes; new ones are "
+            "Browse +25 echoes on the echo equipment page; new ones are "
             "auto-recorded to a JSON file importable by the optimizer."
         )
         self.icon = FluentIcon.SAVE
