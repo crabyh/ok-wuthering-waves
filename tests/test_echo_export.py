@@ -178,8 +178,22 @@ class TestRealScreenshot(unittest.TestCase):
     def setUpClass(cls):
         import cv2
         from onnxocr.onnx_paddleocr import ONNXPaddleOcr
-        cls.ocr = ONNXPaddleOcr(use_angle_cls=False, use_npu=False, use_openvino=False)
         cls.cv2 = cv2
+        # onnxocr's onnxruntime import is only used by the non-openvino backend,
+        # and onnxruntime is NOT a declared dependency. The repo ships openvino
+        # (requirements.txt), so prefer that backend; fall back to onnxruntime.
+        cls.ocr = None
+        for kwargs in ({"use_openvino": True, "use_npu": False},
+                       {"use_openvino": False, "use_npu": False}):
+            try:
+                cls.ocr = ONNXPaddleOcr(use_angle_cls=False, **kwargs)
+                break
+            except Exception:
+                continue
+        if cls.ocr is None:
+            raise unittest.SkipTest(
+                "no onnxocr OCR backend available (install 'openvino' or 'onnxruntime')"
+            )
 
     def _items(self, fname):
         img = self.cv2.imread(os.path.join(IMAGES, fname))
