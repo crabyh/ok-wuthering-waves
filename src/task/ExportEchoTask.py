@@ -41,9 +41,12 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
         self.default_config.update({
             "_enabled": False,
             "Output File": "echoes_export.json",
+            "Save Screenshots": False,
         })
         self.config_description = {
             "Output File": "导出文件路径 / path of the exported JSON file",
+            "Save Screenshots": "保存每个已识别声骸的截图(用于构建测试样本) / "
+            "also save a screenshot of every recognized echo (for building test fixtures)",
         }
         self._recorder = None
         self._out_path = None
@@ -61,12 +64,27 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
             self._unknown_dir = os.path.join(
                 os.path.dirname(out), "echo_export_unrecognized"
             )
+            # screenshots of recognized echoes (only when "Save Screenshots" is
+            # on) — useful for building (screenshot, expected-JSON) test fixtures.
+            self._shot_dir = os.path.join(
+                os.path.dirname(out), "echo_export_screenshots"
+            )
             self._unknown_count = 0
+            self._shot_count = 0
             self.info_set("Output", self._out_path)
             self.info_set("Recorded", 0)
             self.info_set("Unrecognized", 0)
             self.info_set("Status", "monitoring")
         return self._recorder
+
+    def _save_screenshot(self, record):
+        """Save the full frame of a recognized echo (for test fixtures)."""
+        os.makedirs(self._shot_dir, exist_ok=True)
+        self._shot_count += 1
+        safe = re.sub(r'[<>:"/\\|?*]', "", record.echo or record.name_zh or "echo")
+        path = os.path.join(self._shot_dir, f"{self._shot_count:03d}_{safe}.png")
+        cv2.imwrite(path, self.frame)
+        self.log_info(f"[export] saved screenshot {path}")
 
     def _save_unrecognized(self, record):
         """Save the full frame for an echo we couldn't fully map, for later."""
@@ -143,6 +161,8 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
             # mapping later from the image.
             if not record.is_recognized:
                 self._save_unrecognized(record)
+            elif self.config.get("Save Screenshots"):
+                self._save_screenshot(record)
             return True
         else:
             self.info_set("Last", f"{record.name_zh} (already recorded)")
