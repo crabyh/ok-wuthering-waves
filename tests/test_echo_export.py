@@ -121,6 +121,24 @@ class TestParser(unittest.TestCase):
         items.append(item("+20", 0.943, 0.141))
         self.assertIsNone(parse_equipment_frame(items))
 
+    def test_recognized_record_has_no_warnings(self):
+        rec = parse_equipment_frame(spearback_items())
+        self.assertTrue(rec.is_recognized)
+        self.assertEqual(rec.warnings, [])
+
+    def test_unmapped_set_flagged_but_still_parsed(self):
+        # replace the sonata name with an unknown one -> warning + not recognized,
+        # but the rest of the record (echo/stat/substats) still parses.
+        items = [it for it in spearback_items() if it.clean != "轻云出月"]
+        items.append(item("某未知合鸣", 0.836, 0.604))
+        rec = parse_equipment_frame(items)
+        self.assertIsNotNone(rec)
+        self.assertFalse(rec.is_recognized)
+        self.assertIsNone(rec.echo_set)
+        self.assertEqual(rec.set_zh, "某未知合鸣")
+        self.assertTrue(any("set not mapped" in w for w in rec.warnings))
+        self.assertEqual(rec.echo, "Spearback")  # echo still recognized
+
 
 class TestRecorder(unittest.TestCase):
     def test_dedup(self):

@@ -45,7 +45,13 @@ class EchoRecord:
     substats: list[tuple[str, float]] = field(default_factory=list)
     rank: int = 5
     level: int = MAX_LEVEL
+    set_zh: str | None = None     # raw OCR'd sonata name (diagnostic)
     warnings: list[str] = field(default_factory=list)
+
+    @property
+    def is_recognized(self) -> bool:
+        """True if the echo parsed cleanly (mapped echo + set, no warnings)."""
+        return not self.warnings
 
     def to_optimizer_dict(self) -> dict:
         d: dict = {
@@ -153,6 +159,8 @@ def parse_equipment_frame(items: list[OcrItem]) -> EchoRecord | None:
 
     # ---- sonata set ------------------------------------------------------
     set_zh, set_key = _parse_set(panel, cost_item, sonata_item)
+    if set_key is None:
+        warnings.append(f"set not mapped: {set_zh!r}" if set_zh else "set not found")
 
     # ---- identity via mapping (echo key + cost cross-check) ---------------
     echo_key = None
@@ -176,6 +184,7 @@ def parse_equipment_frame(items: list[OcrItem]) -> EchoRecord | None:
         echo_set=set_key,
         substats=substats,
         level=level,
+        set_zh=set_zh,
         warnings=warnings,
     )
 
