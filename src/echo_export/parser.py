@@ -232,7 +232,12 @@ def _parse_name(panel: list[OcrItem], cost_item: OcrItem) -> str:
         and it.clean not in _HEADER_WORDS
     ]
     cands.sort(key=lambda it: it.nx)
-    return "".join(it.clean for it in cands)
+    raw = "".join(it.clean for it in cands)
+    # at narrower resolutions OCR may merge the level into the name box, e.g.
+    # "異相·梦魇·燎照之骑+25" -> strip the trailing level token.
+    raw = _LEVEL_RE.sub("", raw)
+    raw = re.sub(r"(MAX|MX)\s*$", "", raw, flags=re.IGNORECASE)
+    return raw.strip()
 
 
 def _stat_pairs(panel, cost_item, y_top, y_bot):

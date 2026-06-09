@@ -232,6 +232,10 @@ class TestRealScreenshot(unittest.TestCase):
                        {"CritDMG", "ResonanceSkillDMGBonus", "EnergyRegen", "HP", "ATK_FLAT"}),
         "echo_5.png": ("Gulpuff", 1, "ATK", "CelestialLight",
                        {"ATK", "ResonanceLiberationDMGBonus", "CritDMG", "ATK_FLAT", "EnergyRegen"}),
+        # 2552x1407 (~16:9) capture; name+level merge into one OCR box here, which
+        # exercises the level-stripping in the name parser.
+        "resolution.png": ("NightmareInfernoRider", 4, "CritRate", "MoltenRift",
+                           {"CritDMG", "DEF_FLAT", "HeavyAttackDMGBonus", "ATK_FLAT", "ATK"}),
     }
 
     def test_real_max_level_echoes(self):

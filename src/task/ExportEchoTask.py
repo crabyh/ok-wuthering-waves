@@ -110,16 +110,28 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
         if not stable:
             return
 
-        boxes = self.ocr(box=self.box_of_screen(0.55, 0.0, 1.0, 1.0))
+        # Full-frame OCR (absolute coords). The parser isolates the right detail
+        # panel itself, anchored on the COST label, so this is resolution-robust.
+        boxes = self.ocr()
         items = from_ok_boxes(boxes, self.width, self.height)
-        if not is_equipment_page(items):
-            self._processed_hash = h  # don't re-OCR this non-echo panel
+        self._processed_hash = h
+        eq = is_equipment_page(items)
+        self.log_info(
+            f"[export] stable frame {self.width}x{self.height}: "
+            f"ocr_items={len(items)} equipment_page={eq}"
+        )
+        if not eq:
             return
 
         record = parse_equipment_frame(items)
-        self._processed_hash = h
         if record is None:
-            return  # not a usable +25 echo panel
+            self.log_info("[export] equipment page but no +25 echo recorded "
+                          "(not max level, or stats not readable)")
+            return
+        self.log_info(
+            f"[export] parsed {record.name_zh!r} echo={record.echo} "
+            f"set={record.echo_set} cost={record.type} warnings={record.warnings}"
+        )
 
         if recorder.add(record):
             self.info_set("Recorded", len(recorder))
