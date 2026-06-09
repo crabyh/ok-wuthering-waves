@@ -81,8 +81,28 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
 
     @staticmethod
     def _safe(part) -> str:
-        """Filename-safe fragment (strips illegal chars + whitespace; keeps CJK)."""
-        return re.sub(r'[<>:"/\\|?*\s]+', "", str(part if part not in (None, "") else "_"))
+        """ASCII-only filename fragment.
+
+        Chinese/■ characters in filenames cause trouble (downstream tooling,
+        cross-platform, OCR pipelines), so filenames stay pure ASCII; the full
+        Chinese names are preserved in the sidecar index.jsonl instead.
+        """
+        return re.sub(r"[^A-Za-z0-9]+", "", str(part)) if part not in (None, "") else ""
+
+    def _append_index(self, folder, fname, record):
+        """Append the parsed details (incl. CJK names) for a saved screenshot."""
+        import json as _json
+        with open(os.path.join(folder, "index.jsonl"), "a", encoding="utf-8") as f:
+            f.write(_json.dumps({
+                "file": fname,
+                "name_zh": record.name_zh,
+                "set_zh": record.set_zh,
+                "echo": record.echo,
+                "echoSet": record.echo_set,
+                "type": record.type,
+                "stat": record.stat,
+                "warnings": record.warnings,
+            }, ensure_ascii=False) + "\n")
 
     def _imwrite(self, path, frame) -> bool:
         """Write a PNG, supporting non-ASCII (Chinese) paths on Windows.
@@ -98,34 +118,41 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
         return True
 
     def _save_screenshot(self, record):
-        """Save the full frame of a recognized echo (for test fixtures)."""
+        """Save the full frame of a recognized echo (for test fixtures).
+
+        Filename is ASCII-only (echo key/set are English); the Chinese names go
+        into index.jsonl.
+        """
         os.makedirs(self._shot_dir, exist_ok=True)
         self._shot_count += 1
-        name = "_".join(self._safe(p) for p in (
-            f"{self._shot_count:03d}", record.echo, record.name_zh,
-            record.echo_set, f"cost{record.type}"))
-        path = os.path.join(self._shot_dir, f"{name}.png")
+        fname = "_".join(filter(None, (
+            f"{self._shot_count:03d}", self._safe(record.echo),
+            self._safe(record.echo_set), f"cost{record.type}"))) + ".png"
+        path = os.path.join(self._shot_dir, fname)
         self._imwrite(path, self.frame)
+        self._append_index(self._shot_dir, fname, record)
         self.log_info(f"[export] saved screenshot {path}")
 
     def _save_unrecognized(self, record):
         """Save the full frame for an echo we couldn't fully map, for later.
 
-        The name encodes what we *did* read (cleaned zh name, set, cost) so the
-        echo is identifiable at a glance when filling in the mapping.
+        Filename stays ASCII (counter + any recognized set + cost); the Chinese
+        name/set we *did* read are written to index.jsonl so the echo is
+        identifiable when filling in the mapping.
         """
         os.makedirs(self._unknown_dir, exist_ok=True)
         self._unknown_count += 1
-        name = "_".join(self._safe(p) for p in (
-            f"{self._unknown_count:03d}", record.name_zh or "unknown",
-            record.echo_set or record.set_zh, f"cost{record.type}"))
-        path = os.path.join(self._unknown_dir, f"{name}.png")
+        fname = "_".join(filter(None, (
+            f"{self._unknown_count:03d}", self._safe(record.echo_set),
+            f"cost{record.type}"))) + ".png"
+        path = os.path.join(self._unknown_dir, fname)
         self._imwrite(path, self.frame)
+        self._append_index(self._unknown_dir, fname, record)
         self.info_set("Unrecognized", self._unknown_count)
         self.log_info(
-            f"unrecognized echo saved for later mapping: {record.name_zh!r} "
-            f"(echo={record.echo}, set={record.set_zh}->{record.echo_set}); "
-            f"warnings={record.warnings}; saved {path}",
+            f"unrecognized echo #{self._unknown_count} saved {path}: "
+            f"name={record.name_zh!r} set={record.set_zh!r}->{record.echo_set}; "
+            f"warnings={record.warnings}",
             notify=True,
         )
 
