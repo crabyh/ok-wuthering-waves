@@ -110,6 +110,7 @@ class TestMappings(unittest.TestCase):
             mappings.lookup_set("碎梦亡鬼之魇🎯（1/1)"), "ShadowofShatteredDreams"
         )
         self.assertEqual(mappings.lookup_set("碎梦亡鬼之魔"), "ShadowofShatteredDreams")
+        self.assertEqual(mappings.lookup_echo("角")["key"], "Jué")  # accented key
 
     def test_stat_percent_vs_flat(self):
         self.assertEqual(mappings.map_stat("攻击", "9.3%"), "ATK")

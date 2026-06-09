@@ -67,6 +67,8 @@ _MANUAL_ECHO_ZH = {
                          "sets": ["WishesofQuietSnowfall"]},
     "格洛犸图": {"key": "Glommoth", "cost": 3,
                "sets": ["TrailblazingStar", "WishesofQuietSnowfall"]},
+    # Jué (key has an accented é) was dropped by the backbone regex; add it back.
+    "角": {"key": "Jué", "cost": 4, "sets": ["CelestialLight"]},
     # OCR sometimes truncates 嚣风戏猿 to just 戏猿 (the name region clips 嚣风).
     "戏猿": {"key": "Hoochief", "cost": 3, "sets": ["SierraGale", "RejuvenatingGlow"]},
     # 2. high confidence (wiki Other Languages)
