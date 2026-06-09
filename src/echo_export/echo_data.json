@@ -1,0 +1,1509 @@
+{
+ "stat_map": [
+  [
+   "暴击伤害",
+   "CritDMG"
+  ],
+  [
+   "暴击",
+   "CritRate"
+  ],
+  [
+   "暴击率",
+   "CritRate"
+  ],
+  [
+   "共鸣效率",
+   "EnergyRegen"
+  ],
+  [
+   "普攻伤害加成",
+   "BasicAttackDMGBonus"
+  ],
+  [
+   "重击伤害加成",
+   "HeavyAttackDMGBonus"
+  ],
+  [
+   "共鸣技能伤害加成",
+   "ResonanceSkillDMGBonus"
+  ],
+  [
+   "共鸣解放伤害加成",
+   "ResonanceLiberationDMGBonus"
+  ],
+  [
+   "冷凝伤害加成",
+   "Glacio"
+  ],
+  [
+   "热熔伤害加成",
+   "Fusion"
+  ],
+  [
+   "导电伤害加成",
+   "Electro"
+  ],
+  [
+   "气动伤害加成",
+   "Aero"
+  ],
+  [
+   "衍射伤害加成",
+   "Spectro"
+  ],
+  [
+   "湮灭伤害加成",
+   "Havoc"
+  ],
+  [
+   "治疗效果加成",
+   "HealingBonus"
+  ],
+  [
+   "治愈效果加成",
+   "HealingBonus"
+  ],
+  [
+   "攻击",
+   "ATK"
+  ],
+  [
+   "生命",
+   "HP"
+  ],
+  [
+   "防御",
+   "DEF"
+  ]
+ ],
+ "flat_capable": [
+  "ATK",
+  "DEF",
+  "HP"
+ ],
+ "echo_name_zh_to_key": {
+  "持刃贵族": {
+   "key": "AbyssalGladius",
+   "cost": 3,
+   "sets": [
+    "MidnightVeil",
+    "TidebreakingCourage",
+    "ThreadofSeveredFate"
+   ]
+  },
+  "毒冠贵族": {
+   "key": "AbyssalPatricius",
+   "cost": 3,
+   "sets": [
+    "FrostyResolve",
+    "EmpyreanAnthem"
+   ]
+  },
+  "凝水贵族": {
+   "key": "AbyssalMercator",
+   "cost": 3,
+   "sets": [
+    "FrostyResolve",
+    "EternalRadiance"
+   ]
+  },
+  "小翼龙·气动": {
+   "key": "AeroDrake",
+   "cost": 1,
+   "sets": [
+    "GustsofWelkin",
+    "TidebreakingCourage",
+    "FlamingClawprint"
+   ]
+  },
+  "巡徊猎手": {
+   "key": "AeroPredator",
+   "cost": 1,
+   "sets": [
+    "VoidThunder",
+    "SierraGale"
+   ]
+  },
+  "气动棱镜": {
+   "key": "AeroPrism",
+   "cost": 1,
+   "sets": [
+    "EternalRadiance",
+    "TidebreakingCourage"
+   ]
+  },
+  "巡哨机傀": {
+   "key": "AutopuppetScout",
+   "cost": 3,
+   "sets": [
+    "FreezingFrost",
+    "CelestialLight"
+   ]
+  },
+  "绿熔蜥（稚形）": {
+   "key": "BabyViridblazeSaurian",
+   "cost": 1,
+   "sets": [
+    "MoltenRift",
+    "VoidThunder",
+    "LingeringTunes"
+   ]
+  },
+  "鸣钟之龟": {
+   "key": "BellBorneGeochelone",
+   "cost": 4,
+   "sets": [
+    "RejuvenatingGlow",
+    "MoonlitClouds"
+   ]
+  },
+  "釉变幼岩": {
+   "key": "CalcifiedJunrock",
+   "cost": 1,
+   "sets": [
+    "EmpyreanAnthem",
+    "TidebreakingCourage",
+    "CrownofValor"
+   ]
+  },
+  "荣光节使": {
+   "key": "Capitaneus",
+   "cost": 3,
+   "sets": [
+    "GustsofWelkin",
+    "EternalRadiance",
+    "WindwardPilgrimage"
+   ]
+  },
+  "车刃镰": {
+   "key": "Carapace",
+   "cost": 3,
+   "sets": [
+    "SierraGale",
+    "MoonlitClouds"
+   ]
+  },
+  "冥渊守卫": {
+   "key": "ChasmGuardian",
+   "cost": 3,
+   "sets": [
+    "RejuvenatingGlow",
+    "LingeringTunes"
+   ]
+  },
+  "欺诈奇藏": {
+   "key": "ChestMimic",
+   "cost": 1,
+   "sets": [
+    "FrostyResolve",
+    "MidnightVeil",
+    "EmpyreanAnthem"
+   ]
+  },
+  "啾啾河豚": {
+   "key": "Chirpuff",
+   "cost": 1,
+   "sets": [
+    "SierraGale",
+    "SunSinkingEclipse"
+   ]
+  },
+  "浮灵偶": {
+   "key": "ChopChop",
+   "cost": 3,
+   "sets": [
+    "EmpyreanAnthem",
+    "TidebreakingCourage",
+    "DreamoftheLost"
+   ]
+  },
+  "浮灵偶・海德": {
+   "key": "ChopChopHeadless",
+   "cost": 1,
+   "sets": [
+    "EternalRadiance",
+    "TidebreakingCourage"
+   ]
+  },
+  "浮灵偶・蕾弗": {
+   "key": "ChopChopLeftless",
+   "cost": 1,
+   "sets": [
+    "FrostyResolve",
+    "TidebreakingCourage"
+   ]
+  },
+  "浮灵偶・莱特": {
+   "key": "ChopChopRightless",
+   "cost": 1,
+   "sets": [
+    "FrostyResolve",
+    "TidebreakingCourage"
+   ]
+  },
+  "叮咚咚": {
+   "key": "ClangBang",
+   "cost": 1,
+   "sets": [
+    "FreezingFrost",
+    "CelestialLight"
+   ]
+  },
+  "蚀脊龙": {
+   "key": "Corrosaurus",
+   "cost": 3,
+   "sets": [
+    "FlamingClawprint",
+    "FlamewingsShadow"
+   ]
+  },
+  "无冠者": {
+   "key": "Crownless",
+   "cost": 4,
+   "sets": [
+    "SunSinkingEclipse"
+   ]
+  },
+  "游弋蝶": {
+   "key": "Cruisewing",
+   "cost": 1,
+   "sets": [
+    "CelestialLight",
+    "RejuvenatingGlow",
+    "MoonlitClouds"
+   ]
+  },
+  "巨布偶": {
+   "key": "CuddleWuddle",
+   "cost": 3,
+   "sets": [
+    "FrostyResolve",
+    "MidnightVeil"
+   ]
+  },
+  "青羽鹭": {
+   "key": "CyanFeatheredHeron",
+   "cost": 3,
+   "sets": [
+    "SierraGale",
+    "CelestialLight"
+   ]
+  },
+  "苦信者的作俑": {
+   "key": "DevoteesFlesh",
+   "cost": 1,
+   "sets": [
+    "WindwardPilgrimage",
+    "FlamingClawprint",
+    "GustsofWelkin"
+   ]
+  },
+  "晶螯蝎": {
+   "key": "Diamondclaw",
+   "cost": 1,
+   "sets": [
+    "MoonlitClouds",
+    "LingeringTunes"
+   ]
+  },
+  "工头布偶": {
+   "key": "DiggyDuggy",
+   "cost": 1,
+   "sets": [
+    "EternalRadiance",
+    "TidebreakingCourage"
+   ]
+  },
+  "幻昼骑士": {
+   "key": "DiurnusKnight",
+   "cost": 3,
+   "sets": [
+    "EternalRadiance",
+    "TidebreakingCourage"
+   ]
+  },
+  "叹息古龙": {
+   "key": "DragonofDirge",
+   "cost": 4,
+   "sets": [
+    "TidebreakingCourage"
+   ]
+  },
+  "无妄者": {
+   "key": "Dreamless",
+   "cost": 4,
+   "sets": [
+    "SunSinkingEclipse"
+   ]
+  },
+  "侏侏鸵": {
+   "key": "DwarfCassowary",
+   "cost": 1,
+   "sets": [
+    "SierraGale",
+    "RejuvenatingGlow"
+   ]
+  },
+  "小翼龙·导电": {
+   "key": "ElectroDrake",
+   "cost": 1,
+   "sets": [
+    "GustsofWelkin",
+    "MidnightVeil",
+    "FlamingClawprint"
+   ]
+  },
+  "惊蛰猎手": {
+   "key": "ElectroPredator",
+   "cost": 1,
+   "sets": [
+    "MoltenRift",
+    "VoidThunder"
+   ]
+  },
+  "遁地鼠": {
+   "key": "Excarat",
+   "cost": 1,
+   "sets": [
+    "FreezingFrost",
+    "SunSinkingEclipse"
+   ]
+  },
+  "幽翎火": {
+   "key": "FaeIgnis",
+   "cost": 1,
+   "sets": [
+    "MidnightVeil",
+    "EternalRadiance",
+    "DreamoftheLost"
+   ]
+  },
+  "无归的谬误": {
+   "key": "FallacyOfNoReturn",
+   "cost": 4,
+   "sets": [
+    "RejuvenatingGlow"
+   ]
+  },
+  "飞廉之猩": {
+   "key": "FeilianBeringal",
+   "cost": 4,
+   "sets": [
+    "SierraGale"
+   ]
+  },
+  "裂变幼岩": {
+   "key": "FissionJunrock",
+   "cost": 1,
+   "sets": [
+    "VoidThunder",
+    "RejuvenatingGlow",
+    "MoonlitClouds"
+   ]
+  },
+  "奏谕乐师": {
+   "key": "Flautist",
+   "cost": 3,
+   "sets": [
+    "VoidThunder",
+    "LingeringTunes"
+   ]
+  },
+  "莳植熊蜂": {
+   "key": "FloraDrone",
+   "cost": 1,
+   "sets": [
+    "PactofNeonlightLeap",
+    "RiteofGildedRevelation",
+    "SoundofTrueName",
+    "ReelofSplicedMemories"
+   ]
+  },
+  "莳植机麋": {
+   "key": "FloraReindeer",
+   "cost": 3,
+   "sets": [
+    "RiteofGildedRevelation",
+    "ReelofSplicedMemories"
+   ]
+  },
+  "霜鳞蜃甲": {
+   "key": "FrostbiteColeoid",
+   "cost": 3,
+   "sets": [
+    "HaloofStarryRadiance",
+    "WishesofQuietSnowfall"
+   ]
+  },
+  "霜鬃狼": {
+   "key": "FrostscourgeStalker",
+   "cost": 1,
+   "sets": [
+    "MidnightVeil",
+    "EternalRadiance"
+   ]
+  },
+  "小翼龙・热熔": {
+   "key": "FusionDrake",
+   "cost": 1,
+   "sets": [
+    "WindwardPilgrimage",
+    "FlamingClawprint"
+   ]
+  },
+  "火鬃狼": {
+   "key": "FusionDreadmane",
+   "cost": 1,
+   "sets": [
+    "MoltenRift",
+    "RejuvenatingGlow"
+   ]
+  },
+  "热熔棱镜": {
+   "key": "FusionPrism",
+   "cost": 1,
+   "sets": [
+    "FreezingFrost",
+    "MoltenRift",
+    "LingeringTunes"
+   ]
+  },
+  "鸣泣战士": {
+   "key": "FusionWarrior",
+   "cost": 1,
+   "sets": [
+    "MoltenRift",
+    "VoidThunder",
+    "SierraGale"
+   ]
+  },
+  "风鬃狼": {
+   "key": "GalescourgeStalker",
+   "cost": 1,
+   "sets": [
+    "FrostyResolve",
+    "EmpyreanAnthem"
+   ]
+  },
+  "岩蛛S4型": {
+   "key": "GeospiderS4",
+   "cost": 1,
+   "sets": [
+    "PactofNeonlightLeap",
+    "HaloofStarryRadiance",
+    "TrailblazingStar"
+   ]
+  },
+  "小翼龙·冷凝": {
+   "key": "GlacioDrake",
+   "cost": 1,
+   "sets": [
+    "GustsofWelkin",
+    "WindwardPilgrimage"
+   ]
+  },
+  "雪鬃狼": {
+   "key": "GlacioDreadmane",
+   "cost": 3,
+   "sets": [
+    "FreezingFrost",
+    "MoonlitClouds"
+   ]
+  },
+  "破霜猎手": {
+   "key": "GlacioPredator",
+   "cost": 1,
+   "sets": [
+    "FreezingFrost",
+    "CelestialLight"
+   ]
+  },
+  "冷凝棱镜": {
+   "key": "GlacioPrism",
+   "cost": 1,
+   "sets": [
+    "FreezingFrost",
+    "SunSinkingEclipse",
+    "MoonlitClouds"
+   ]
+  },
+  "愚金幼岩": {
+   "key": "GoldenJunrock",
+   "cost": 1,
+   "sets": [
+    "FrostyResolve",
+    "EternalRadiance",
+    "LawofHarmony"
+   ]
+  },
+  "咕咕河豚": {
+   "key": "Gulpuff",
+   "cost": 1,
+   "sets": [
+    "FreezingFrost",
+    "CelestialLight"
+   ]
+  },
+  "暗鬃狼": {
+   "key": "HavocDreadmane",
+   "cost": 3,
+   "sets": [
+    "MoltenRift",
+    "SunSinkingEclipse"
+   ]
+  },
+  "小翼龙・湮灭": {
+   "key": "HavocDrake",
+   "cost": 1,
+   "sets": [
+    "WindwardPilgrimage",
+    "FlamingClawprint",
+    "ThreadofSeveredFate"
+   ]
+  },
+  "湮灭棱镜": {
+   "key": "HavocPrism",
+   "cost": 1,
+   "sets": [
+    "VoidThunder",
+    "CelestialLight",
+    "SunSinkingEclipse"
+   ]
+  },
+  "审判战士": {
+   "key": "HavocWarrior",
+   "cost": 1,
+   "sets": [
+    "CelestialLight",
+    "SunSinkingEclipse"
+   ]
+  },
+  "赫卡忒": {
+   "key": "Hecate",
+   "cost": 4,
+   "sets": [
+    "EmpyreanAnthem",
+    "FreezingFrost",
+    "MoltenRift",
+    "VoidThunder",
+    "SierraGale",
+    "CelestialLight",
+    "SunSinkingEclipse"
+   ]
+  },
+  "寒霜陆龟": {
+   "key": "Hoartoise",
+   "cost": 1,
+   "sets": [
+    "FreezingFrost",
+    "CelestialLight"
+   ]
+  },
+  "魔术先生": {
+   "key": "HocusPocus",
+   "cost": 1,
+   "sets": [
+    "FrostyResolve",
+    "EmpyreanAnthem"
+   ]
+  },
+  "飓力熊": {
+   "key": "Hurriclaw",
+   "cost": 3,
+   "sets": [
+    "TidebreakingCourage",
+    "GustsofWelkin",
+    "CrownofValor"
+   ]
+  },
+  "海维夏": {
+   "key": "Hyvatia",
+   "cost": 4,
+   "sets": [
+    "PactofNeonlightLeap",
+    "RiteofGildedRevelation"
+   ]
+  },
+  "冰盈舞者": {
+   "key": "IceglintDancer",
+   "cost": 1,
+   "sets": [
+    "TrailblazingStar",
+    "WishesofQuietSnowfall",
+    "ReelofSplicedMemories"
+   ]
+  },
+  "无常凶鹭": {
+   "key": "ImpermanenceHeron",
+   "cost": 4,
+   "sets": [
+    "MoonlitClouds"
+   ]
+  },
+  "燎照之骑": {
+   "key": "InfernoRider",
+   "cost": 4,
+   "sets": [
+    "MoltenRift"
+   ]
+  },
+  "重工铁蹄": {
+   "key": "Ironhoof",
+   "cost": 3,
+   "sets": [
+    "PactofNeonlightLeap",
+    "WishesofQuietSnowfall",
+    "ReelofSplicedMemories"
+   ]
+  },
+  "角鳄": {
+   "key": "Kerasaur",
+   "cost": 3,
+   "sets": [
+    "WindwardPilgrimage",
+    "FlamingClawprint",
+    "FlamewingsShadow"
+   ]
+  },
+  "冠顶械隼": {
+   "key": "Kronablight",
+   "cost": 3,
+   "sets": [
+    "TrailblazingStar",
+    "ChromaticFoam"
+   ]
+  },
+  "海之女": {
+   "key": "LadyoftheSea",
+   "cost": 4,
+   "sets": [
+    "CrownofValor"
+   ]
+  },
+  "卫冕节使": {
+   "key": "LaGuardia",
+   "cost": 1,
+   "sets": [
+    "MidnightVeil",
+    "GustsofWelkin",
+    "FlamingClawprint"
+   ]
+  },
+  "辉萤军势": {
+   "key": "LampylumenMyriad",
+   "cost": 4,
+   "sets": [
+    "FreezingFrost"
+   ]
+  },
+  "融火虫": {
+   "key": "LavaLarva",
+   "cost": 1,
+   "sets": [
+    "MoltenRift",
+    "LingeringTunes"
+   ]
+  },
+  "踏光兽": {
+   "key": "Lightcrusher",
+   "cost": 3,
+   "sets": [
+    "CelestialLight"
+   ]
+  },
+  "荣耀狮像": {
+   "key": "LionessofGlory",
+   "cost": 4,
+   "sets": [
+    "FlamingClawprint"
+   ]
+  },
+  "罗蕾莱": {
+   "key": "Lorelei",
+   "cost": 4,
+   "sets": [
+    "MidnightVeil"
+   ]
+  },
+  "寂寞小姐": {
+   "key": "LottieLost",
+   "cost": 1,
+   "sets": [
+    "FrostyResolve",
+    "TidebreakingCourage"
+   ]
+  },
+  "游鳞机枢": {
+   "key": "LumiscaleConstruct",
+   "cost": 3,
+   "sets": [
+    "FreezingFrost",
+    "VoidThunder"
+   ]
+  },
+  "聚械机偶": {
+   "key": "MechAbomination",
+   "cost": 4,
+   "sets": [
+    "LingeringTunes"
+   ]
+  },
+  "矿岩熊蜂": {
+   "key": "MiningDrone",
+   "cost": 1,
+   "sets": [
+    "HaloofStarryRadiance",
+    "RiteofGildedRevelation",
+    "SoundofTrueName",
+    "ReelofSplicedMemories"
+   ]
+  },
+  "矿岩机麋": {
+   "key": "MiningReindeer",
+   "cost": 3,
+   "sets": [
+    "PactofNeonlightLeap",
+    "ReelofSplicedMemories"
+   ]
+  },
+  "哀声鸷": {
+   "key": "MourningAix",
+   "cost": 4,
+   "sets": [
+    "CelestialLight"
+   ]
+  },
+  "无铭探索者": {
+   "key": "NamelessExplorer",
+   "cost": 4,
+   "sets": [
+    "SoundofTrueName",
+    "ReelofSplicedMemories"
+   ]
+  },
+  "云海妖精": {
+   "key": "NimbusWraith",
+   "cost": 1,
+   "sets": [
+    "EmpyreanAnthem",
+    "MidnightVeil",
+    "FlamewingsShadow"
+   ]
+  },
+  "梦魇・巡徊猎手": {
+   "key": "NightmareAeroPredator",
+   "cost": 1,
+   "sets": [
+    "CrownofValor"
+   ]
+  },
+  "梦魇・刺玫菇（稚形）": {
+   "key": "NightmareBabyRoseshroom",
+   "cost": 1,
+   "sets": [
+    "FlamewingsShadow"
+   ]
+  },
+  "梦魇・绿熔蜥（稚形）": {
+   "key": "NightmareBabyViridblazeSaurian",
+   "cost": 1,
+   "sets": [
+    "FlamewingsShadow"
+   ]
+  },
+  "梦魇・啾啾河豚": {
+   "key": "NightmareChirpuff",
+   "cost": 1,
+   "sets": [
+    "LawofHarmony"
+   ]
+  },
+  "梦魇·无冠者": {
+   "key": "NightmareCrownless",
+   "cost": 4,
+   "sets": [
+    "SunSinkingEclipse"
+   ]
+  },
+  "梦魇・青羽鹭": {
+   "key": "NightmareCyanFeatheredHeron",
+   "cost": 3,
+   "sets": [
+    "LawofHarmony"
+   ]
+  },
+  "梦魇・侏侏鸵": {
+   "key": "NightmareDwarfCassowary",
+   "cost": 1,
+   "sets": [
+    "ThreadofSeveredFate"
+   ]
+  },
+  "梦魇・惊蛰猎手": {
+   "key": "NightmareElectroPredator",
+   "cost": 1,
+   "sets": [
+    "CrownofValor"
+   ]
+  },
+  "梦魇・飞廉之猩": {
+   "key": "NightmareFeilianBeringal",
+   "cost": 4,
+   "sets": [
+    "SierraGale"
+   ]
+  },
+  "梦魇・破霜猎手": {
+   "key": "NightmareGlacioPredator",
+   "cost": 1,
+   "sets": [
+    "DreamoftheLost"
+   ]
+  },
+  "梦魇・咕咕河豚": {
+   "key": "NightmareGulpuff",
+   "cost": 1,
+   "sets": [
+    "LawofHarmony"
+   ]
+  },
+  "梦魇·审判战士": {
+   "key": "NightmareHavocWarrior",
+   "cost": 1,
+   "sets": [
+    "DreamoftheLost"
+   ]
+  },
+  "梦魇·赫卡忒": {
+   "key": "NightmareHecate",
+   "cost": 4,
+   "sets": [
+    "DreamoftheLost"
+   ]
+  },
+  "梦魇・无常凶鹭": {
+   "key": "NightmareImpermanenceHeron",
+   "cost": 4,
+   "sets": [
+    "MidnightVeil"
+   ]
+  },
+  "梦魇・燎照之骑": {
+   "key": "NightmareInfernoRider",
+   "cost": 4,
+   "sets": [
+    "MoltenRift"
+   ]
+  },
+  "梦魇・凯尔匹": {
+   "key": "NightmareKelpie",
+   "cost": 4,
+   "sets": [
+    "WindwardPilgrimage",
+    "GustsofWelkin"
+   ]
+  },
+  "梦魇・辉萤军势": {
+   "key": "NightmareLampylumenMyriad",
+   "cost": 4,
+   "sets": [
+    "FrostyResolve",
+    "EmpyreanAnthem"
+   ]
+  },
+  "梦魇・哀声鸷": {
+   "key": "NightmareMourningAix",
+   "cost": 4,
+   "sets": [
+    "EternalRadiance"
+   ]
+  },
+  "梦魇・刺玫菇": {
+   "key": "NightmareRoseshroom",
+   "cost": 3,
+   "sets": [
+    "ThreadofSeveredFate"
+   ]
+  },
+  "梦魇・振铎乐师": {
+   "key": "NightmareTambourinist",
+   "cost": 3,
+   "sets": [
+    "DreamoftheLost"
+   ]
+  },
+  "梦魇・朔雷之鳞": {
+   "key": "NightmareTempestMephis",
+   "cost": 4,
+   "sets": [
+    "EmpyreanAnthem",
+    "VoidThunder"
+   ]
+  },
+  "梦魇・云闪之鳞": {
+   "key": "NightmareThunderingMephis",
+   "cost": 4,
+   "sets": [
+    "VoidThunder"
+   ]
+  },
+  "梦魇・呜咔咔": {
+   "key": "NightmareTickTack",
+   "cost": 1,
+   "sets": [
+    "ThreadofSeveredFate"
+   ]
+  },
+  "梦魇・紫羽鹭": {
+   "key": "NightmareVioletFeatheredHeron",
+   "cost": 3,
+   "sets": [
+    "CrownofValor"
+   ]
+  },
+  "梦魇・绿熔蜥": {
+   "key": "NightmareViridblazeSaurian",
+   "cost": 3,
+   "sets": [
+    "FlamewingsShadow"
+   ]
+  },
+  "暗夜骑士": {
+   "key": "NocturnusKnight",
+   "cost": 3,
+   "sets": [
+    "MidnightVeil",
+    "EmpyreanAnthem"
+   ]
+  },
+  "传道者的遗形": {
+   "key": "PilgrimsShell",
+   "cost": 3,
+   "sets": [
+    "WindwardPilgrimage",
+    "FlamingClawprint"
+   ]
+  },
+  "巡游骑士": {
+   "key": "QuestlessKnight",
+   "cost": 3,
+   "sets": [
+    "FrostyResolve",
+    "MidnightVeil"
+   ]
+  },
+  "重塑雕像的拳砾": {
+   "key": "RageAgainsttheStatue",
+   "cost": 3,
+   "sets": [
+    "EternalRadiance",
+    "GustsofWelkin",
+    "LawofHarmony"
+   ]
+  },
+  "炉芯机骸": {
+   "key": "ReactorHusk",
+   "cost": 4,
+   "sets": [
+    "HaloofStarryRadiance",
+    "ChromaticFoam"
+   ]
+  },
+  "磐石守卫": {
+   "key": "RocksteadyGuardian",
+   "cost": 3,
+   "sets": [
+    "CelestialLight",
+    "RejuvenatingGlow"
+   ]
+  },
+  "刺玫菇": {
+   "key": "Roseshroom",
+   "cost": 3,
+   "sets": [
+    "FreezingFrost",
+    "SunSinkingEclipse"
+   ]
+  },
+  "隐迹铁影": {
+   "key": "SabercatProwler",
+   "cost": 3,
+   "sets": [
+    "PactofNeonlightLeap",
+    "HaloofStarryRadiance",
+    "SoundofTrueName"
+   ]
+  },
+  "锯袭铁影": {
+   "key": "SabercatReaver",
+   "cost": 3,
+   "sets": [
+    "PactofNeonlightLeap",
+    "HaloofStarryRadiance",
+    "SoundofTrueName"
+   ]
+  },
+  "碎獠猪": {
+   "key": "SabyrBoar",
+   "cost": 1,
+   "sets": [
+    "FreezingFrost",
+    "SierraGale",
+    "MoonlitClouds"
+   ]
+  },
+  "慈悲节使": {
+   "key": "Sacerdos",
+   "cost": 1,
+   "sets": [
+    "GustsofWelkin",
+    "WindwardPilgrimage"
+   ]
+  },
+  "赦罪节使": {
+   "key": "Sagittario",
+   "cost": 1,
+   "sets": [
+    "EternalRadiance",
+    "GustsofWelkin",
+    "FlamingClawprint"
+   ]
+  },
+  "异构武装挑战获得": {
+   "key": "SentryConstruct",
+   "cost": 4,
+   "sets": [
+    "FrostyResolve"
+   ]
+  },
+  "影烁者": {
+   "key": "ShadowStepper",
+   "cost": 1,
+   "sets": [
+    "TrailblazingStar",
+    "ChromaticFoam",
+    "WishesofQuietSnowfall"
+   ]
+  },
+  "辛吉勒姆": {
+   "key": "Sigillum",
+   "cost": 4,
+   "sets": [
+    "TrailblazingStar"
+   ]
+  },
+  "咔嚓嚓": {
+   "key": "SnipSnap",
+   "cost": 1,
+   "sets": [
+    "MoltenRift",
+    "RejuvenatingGlow",
+    "LingeringTunes"
+   ]
+  },
+  "探隧重机": {
+   "key": "SpacetrekExplorer",
+   "cost": 3,
+   "sets": [
+    "HaloofStarryRadiance",
+    "ChromaticFoam",
+    "SoundofTrueName"
+   ]
+  },
+  "箭簇熊": {
+   "key": "Spearback",
+   "cost": 3,
+   "sets": [
+    "MoonlitClouds",
+    "LingeringTunes"
+   ]
+  },
+  "小翼龙・衍射": {
+   "key": "SpectroDrake",
+   "cost": 1,
+   "sets": [
+    "WindwardPilgrimage",
+    "FlamingClawprint"
+   ]
+  },
+  "衍射棱镜": {
+   "key": "SpectroPrism",
+   "cost": 1,
+   "sets": [
+    "MoltenRift",
+    "VoidThunder",
+    "CelestialLight"
+   ]
+  },
+  "坚岩斗士": {
+   "key": "StonewallBracer",
+   "cost": 3,
+   "sets": [
+    "RejuvenatingGlow",
+    "MoonlitClouds"
+   ]
+  },
+  "振铎乐师": {
+   "key": "Tambourinist",
+   "cost": 3,
+   "sets": [
+    "FreezingFrost",
+    "SunSinkingEclipse"
+   ]
+  },
+  "朔雷之鳞": {
+   "key": "TempestMephis",
+   "cost": 4,
+   "sets": [
+    "VoidThunder"
+   ]
+  },
+  "伪作的神王": {
+   "key": "TheFalseSovereign",
+   "cost": 4,
+   "sets": [
+    "CrownofValor"
+   ]
+  },
+  "云闪之鳞": {
+   "key": "ThunderingMephis",
+   "cost": 4,
+   "sets": [
+    "VoidThunder"
+   ]
+  },
+  "呜咔咔": {
+   "key": "TickTack",
+   "cost": 1,
+   "sets": [
+    "SunSinkingEclipse",
+    "RejuvenatingGlow",
+    "LingeringTunes"
+   ]
+  },
+  "通行灯偶": {
+   "key": "TrafficIlluminator",
+   "cost": 1,
+   "sets": [
+    "MoltenRift",
+    "VoidThunder",
+    "SierraGale"
+   ]
+  },
+  "颤栗战士": {
+   "key": "TremorWarrior",
+   "cost": 1,
+   "sets": [
+    "HaloofStarryRadiance",
+    "ChromaticFoam",
+    "WishesofQuietSnowfall"
+   ]
+  },
+  "双极・渊陨重锋": {
+   "key": "TwinNovaCollapsarBlade",
+   "cost": 3,
+   "sets": [
+    "RiteofGildedRevelation",
+    "TrailblazingStar",
+    "SoundofTrueName"
+   ]
+  },
+  "双极・星升辉铳": {
+   "key": "TwinNovaNebulousCannon",
+   "cost": 3,
+   "sets": [
+    "RiteofGildedRevelation",
+    "ChromaticFoam"
+   ]
+  },
+  "先锋幼岩": {
+   "key": "VanguardJunrock",
+   "cost": 1,
+   "sets": [
+    "VoidThunder",
+    "RejuvenatingGlow",
+    "LingeringTunes"
+   ]
+  },
+  "紫羽鹭": {
+   "key": "VioletFeatheredHeron",
+   "cost": 3,
+   "sets": [
+    "MoltenRift",
+    "VoidThunder"
+   ]
+  },
+  "琉璃刀伶": {
+   "key": "VitreumDancer",
+   "cost": 3,
+   "sets": [
+    "EternalRadiance",
+    "EmpyreanAnthem"
+   ]
+  },
+  "雷鬃狼": {
+   "key": "VoltscourgeStalker",
+   "cost": 1,
+   "sets": [
+    "MidnightVeil",
+    "EmpyreanAnthem"
+   ]
+  },
+  "呼咻咻": {
+   "key": "WhiffWhaff",
+   "cost": 1,
+   "sets": [
+    "SierraGale",
+    "RejuvenatingGlow",
+    "MoonlitClouds"
+   ]
+  },
+  "风鳞蜃甲": {
+   "key": "WindlashColeoid",
+   "cost": 3,
+   "sets": [
+    "RiteofGildedRevelation",
+    "WishesofQuietSnowfall"
+   ]
+  },
+  "绿熔蜥": {
+   "key": "ViridblazeSaurian",
+   "cost": 3,
+   "sets": [
+    "MoltenRift",
+    "MoonlitClouds"
+   ]
+  },
+  "刺玫菇（稚形）": {
+   "key": "YoungRoseshroom",
+   "cost": 1,
+   "sets": [
+    "SierraGale",
+    "SunSinkingEclipse"
+   ]
+  },
+  "阿嗞嗞": {
+   "key": "ZigZag",
+   "cost": 1,
+   "sets": [
+    "CelestialLight",
+    "MoonlitClouds",
+    "LingeringTunes"
+   ]
+  },
+  "噼啪啪": {
+   "key": "ZipZap",
+   "cost": 1,
+   "sets": [
+    "PactofNeonlightLeap",
+    "RiteofGildedRevelation",
+    "ChromaticFoam",
+    "SoundofTrueName"
+   ]
+  }
+ },
+ "echo_name_zht_to_key": {
+  "持刃貴族": "AbyssalGladius",
+  "毒冠貴族": "AbyssalPatricius",
+  "凝水貴族": "AbyssalMercator",
+  "小翼龍·氣動": "AeroDrake",
+  "巡徊獵手": "AeroPredator",
+  "氣動稜鏡": "AeroPrism",
+  "巡哨機傀": "AutopuppetScout",
+  "綠熔蜥（稚形）": "BabyViridblazeSaurian",
+  "鳴鐘之龜": "BellBorneGeochelone",
+  "釉變幼岩": "CalcifiedJunrock",
+  "榮光節使": "Capitaneus",
+  "車刃鐮": "Carapace",
+  "冥淵守衛": "ChasmGuardian",
+  "欺詐奇藏": "ChestMimic",
+  "啾啾河豚": "Chirpuff",
+  "浮靈偶": "ChopChop",
+  "浮靈偶・海德": "ChopChopHeadless",
+  "浮靈偶・蕾弗": "ChopChopLeftless",
+  "浮靈偶・萊特": "ChopChopRightless",
+  "叮咚咚": "ClangBang",
+  "蝕脊龍": "Corrosaurus",
+  "無冠者": "Crownless",
+  "游弋蝶": "Cruisewing",
+  "巨布偶": "CuddleWuddle",
+  "青羽鷺": "CyanFeatheredHeron",
+  "苦信者的作俑": "DevoteesFlesh",
+  "晶螯蠍": "Diamondclaw",
+  "工頭布偶": "DiggyDuggy",
+  "幻晝騎士": "DiurnusKnight",
+  "嘆息古龍": "DragonofDirge",
+  "無妄者": "Dreamless",
+  "侏侏鴕": "DwarfCassowary",
+  "小翼龍·導電": "ElectroDrake",
+  "驚蟄獵手": "ElectroPredator",
+  "遁地鼠": "Excarat",
+  "幽翎火": "FaeIgnis",
+  "無歸的謬誤": "FallacyOfNoReturn",
+  "飛廉之猩": "FeilianBeringal",
+  "裂變幼岩": "FissionJunrock",
+  "奏諭樂師": "Flautist",
+  "蒔植熊蜂": "FloraDrone",
+  "蒔植機麋": "FloraReindeer",
+  "霜鱗蜃甲": "FrostbiteColeoid",
+  "霜鬃狼": "FrostscourgeStalker",
+  "小翼龍・熱熔": "FusionDrake",
+  "火鬃狼": "FusionDreadmane",
+  "熱熔棱鏡": "FusionPrism",
+  "鳴泣戰士": "FusionWarrior",
+  "風鬃狼": "GalescourgeStalker",
+  "岩蛛S4型": "GeospiderS4",
+  "小翼龍·冷凝": "GlacioDrake",
+  "雪鬃狼": "GlacioDreadmane",
+  "破霜獵手": "GlacioPredator",
+  "冷凝棱鏡": "GlacioPrism",
+  "愚金幼岩": "GoldenJunrock",
+  "咕咕河豚": "Gulpuff",
+  "暗鬃狼": "HavocDreadmane",
+  "小翼龍・湮滅": "HavocDrake",
+  "湮滅棱鏡": "HavocPrism",
+  "審判戰士": "HavocWarrior",
+  "赫卡忒": "Hecate",
+  "寒霜陸龜": "Hoartoise",
+  "魔術先生": "HocusPocus",
+  "颶力熊": "Hurriclaw",
+  "海維夏": "Hyvatia",
+  "冰盈舞者": "IceglintDancer",
+  "無常凶鷺": "ImpermanenceHeron",
+  "燎照之騎": "InfernoRider",
+  "重工鐵蹄": "Ironhoof",
+  "角鱷": "Kerasaur",
+  "冠頂械隼": "Kronablight",
+  "海之女": "LadyoftheSea",
+  "衛冕節使": "LaGuardia",
+  "輝螢軍勢": "LampylumenMyriad",
+  "融火蟲": "LavaLarva",
+  "踏光獸": "Lightcrusher",
+  "榮耀獅像": "LionessofGlory",
+  "羅蕾萊": "Lorelei",
+  "寂寞小姐": "LottieLost",
+  "遊鱗機樞": "LumiscaleConstruct",
+  "聚械機偶": "MechAbomination",
+  "礦岩熊蜂": "MiningDrone",
+  "礦岩機麋": "MiningReindeer",
+  "哀聲鷙": "MourningAix",
+  "雲海妖精": "NimbusWraith",
+  "夢魘・巡徊獵手": "NightmareAeroPredator",
+  "夢魘・刺玫菇（稚形）": "NightmareBabyRoseshroom",
+  "夢魘・綠熔蜥（稚形）": "NightmareBabyViridblazeSaurian",
+  "夢魘・啾啾河豚": "NightmareChirpuff",
+  "夢魘·無冠者": "NightmareCrownless",
+  "夢魘・青羽鷺": "NightmareCyanFeatheredHeron",
+  "夢魘・侏侏鴕": "NightmareDwarfCassowary",
+  "夢魘・驚蟄獵手": "NightmareElectroPredator",
+  "夢魘・飛廉之猩": "NightmareFeilianBeringal",
+  "夢魘・破霜獵手": "NightmareGlacioPredator",
+  "夢魘・咕咕河豚": "NightmareGulpuff",
+  "夢魘·審判戰士": "NightmareHavocWarrior",
+  "夢魘·赫卡忒": "NightmareHecate",
+  "夢魘・無常凶鷺": "NightmareImpermanenceHeron",
+  "夢魘・燎照之騎": "NightmareInfernoRider",
+  "夢魘・凱爾匹": "NightmareKelpie",
+  "夢魘・輝螢軍勢": "NightmareLampylumenMyriad",
+  "夢魘・哀聲鷙": "NightmareMourningAix",
+  "夢魘・刺玫菇": "NightmareRoseshroom",
+  "夢魘・振鐸樂師": "NightmareTambourinist",
+  "夢魘・朔雷之鱗": "NightmareTempestMephis",
+  "夢魘・雲閃之鱗": "NightmareThunderingMephis",
+  "夢魘・嗚咔咔": "NightmareTickTack",
+  "夢魘・紫羽鷺": "NightmareVioletFeatheredHeron",
+  "夢魘・綠熔蜥": "NightmareViridblazeSaurian",
+  "暗夜騎士": "NocturnusKnight",
+  "傳道者的遺形": "PilgrimsShell",
+  "巡遊騎士": "QuestlessKnight",
+  "重塑雕像的拳礫": "RageAgainsttheStatue",
+  "爐芯機骸": "ReactorHusk",
+  "磐石守衛": "RocksteadyGuardian",
+  "刺玫菇": "Roseshroom",
+  "隱跡鐵影": "SabercatProwler",
+  "鋸襲鐵影": "SabercatReaver",
+  "碎獠豬": "SabyrBoar",
+  "慈悲節使": "Sacerdos",
+  "赦罪節使": "Sagittario",
+  "異構武裝挑戰獲得": "SentryConstruct",
+  "影爍者": "ShadowStepper",
+  "辛吉勒姆": "Sigillum",
+  "咔嚓嚓": "SnipSnap",
+  "探隧重機": "SpacetrekExplorer",
+  "箭簇熊": "Spearback",
+  "小翼龍・衍射": "SpectroDrake",
+  "衍射棱鏡": "SpectroPrism",
+  "堅岩鬥士": "StonewallBracer",
+  "振鐸樂師": "Tambourinist",
+  "朔雷之鱗": "TempestMephis",
+  "偽作的神王": "TheFalseSovereign",
+  "雲閃之鱗": "ThunderingMephis",
+  "嗚咔咔": "TickTack",
+  "通行燈偶": "TrafficIlluminator",
+  "顫慄戰士": "TremorWarrior",
+  "雙極・淵隕重鋒": "TwinNovaCollapsarBlade",
+  "雙極・星升輝銃": "TwinNovaNebulousCannon",
+  "先鋒幼岩": "VanguardJunrock",
+  "紫羽鷺": "VioletFeatheredHeron",
+  "琉璃刀伶": "VitreumDancer",
+  "雷鬃狼": "VoltscourgeStalker",
+  "呼咻咻": "WhiffWhaff",
+  "風鱗蜃甲": "WindlashColeoid",
+  "綠熔蜥": "ViridblazeSaurian",
+  "刺玫菇（稚形）": "YoungRoseshroom",
+  "阿嗞嗞": "ZigZag",
+  "劈啪啪": "ZipZap"
+ },
+ "set_name_zh_to_key": {
+  "浮星祛暗": "CelestialLight",
+  "斑驳粉饰之沫": "ChromaticFoam",
+  "荣斗铸锋之冠": "CrownofValor",
+  "失序彼岸之梦": "DreamoftheLost",
+  "高天共奏之曲": "EmpyreanAnthem",
+  "此间永驻之光": "EternalRadiance",
+  "焚羽猎魔之影": "FlamewingsShadow",
+  "奔狼燎原之焰": "FlamingClawprint",
+  "凝夜白霜": "FreezingFrost",
+  "凌冽决断之心": "FrostyResolve",
+  "流云逝尽之空": "GustsofWelkin",
+  "星构寻辉之环": "HaloofStarryRadiance",
+  "息界同调之律": "LawofHarmony",
+  "不绝余音": "LingeringTunes",
+  "幽夜隐匿之帷": "MidnightVeil",
+  "熔山裂谷": "MoltenRift",
+  "轻云出月": "MoonlitClouds",
+  "逆光跃彩之约": "PactofNeonlightLeap",
+  "隐世回光": "RejuvenatingGlow",
+  "流金溯真之式": "RiteofGildedRevelation",
+  "碎梦亡鬼之魇": "ShadowofShatteredDreams",
+  "啸谷长风": "SierraGale",
+  "听唤语义之愿": "SoundofTrueName",
+  "沉日劫明": "SunSinkingEclipse",
+  "命理崩毁之弦": "ThreadofSeveredFate",
+  "无惧浪涛之勇": "TidebreakingCourage",
+  "长路启航之星": "TrailblazingStar",
+  "彻空冥雷": "VoidThunder",
+  "愿戴荣光之旅": "WindwardPilgrimage",
+  "雪落无声之愿": "WishesofQuietSnowfall"
+ },
+ "_gaps": {
+  "echoes_no_zh": [
+   "FractsidusThruster",
+   "Glommoth",
+   "Hoochief",
+   "Hooscamp",
+   "ReminiscenceDenia",
+   "ReminiscenceFenrico",
+   "ReminiscenceFleurdelys",
+   "ReminiscenceKronaclaw",
+   "ReminiscenceThrenodianLeviathan",
+   "ReminiscenceNightmareAdamSmasher",
+   "ReminiscenceThrenodianVoidborneConstruct",
+   "VoidwingMoth"
+  ],
+  "sets_no_zh": [
+   "ReelofSplicedMemories"
+  ]
+ }
+}
