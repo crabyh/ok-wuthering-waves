@@ -3,7 +3,6 @@ import os
 import re
 
 import cv2
-import numpy as np
 from qfluentwidgets import FluentIcon
 
 from ok import Logger, TriggerTask
@@ -21,8 +20,8 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
     wuthering-waves-optimizer "Import echoes from text" format.
 
     This task never controls the game; you drive navigation. It monitors the
-    screen, and whenever a new, stable, max-level echo panel is shown it parses
-    and records it. Toggle it on/off from the control panel. The parsing logic
+    screen, and whenever a new max-level echo panel is shown it parses and
+    records it. Toggle it on/off from the control panel. The parsing logic
     lives in :mod:`src.echo_export` and is unit tested on its own.
     """
 
@@ -38,7 +37,7 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
         # NOTE: do NOT gate on supported_languages — that filters by the OK-WW
         # *UI* language, but this feature only needs the *game* to be in
         # Simplified/Traditional Chinese (for OCR). Keep the task always visible.
-        self.trigger_interval = 0.2
+        self.trigger_interval = 0.5
         self.default_config.update({
             "_enabled": False,
             "Output File": "echoes_export.json",
@@ -48,9 +47,8 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
         }
         self._recorder = None
         self._out_path = None
-        self._last_hash = None
-        self._last_hash_count = 0
-        self._processed_hash = None
+        self._last_sig = None   # content signature of the last seen echo
+        self._tick = 0
 
     # -- lifecycle ---------------------------------------------------------
     def _ensure_recorder(self):
@@ -85,24 +83,6 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
             notify=True,
         )
 
-    # -- stable-frame detection (cheap, no OCR) ----------------------------
-    def _panel_hash(self):
-        """Downscaled hash of the right detail panel; stable between scrolls."""
-        box = self.box_of_screen(0.55, 0.0, 1.0, 1.0)
-        crop = box.crop_frame(self.frame)
-        small = cv2.resize(cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY), (24, 24))
-        return small.tobytes()
-
-    def _is_stable(self):
-        h = self._panel_hash()
-        if h == self._last_hash:
-            self._last_hash_count += 1
-        else:
-            self._last_hash = h
-            self._last_hash_count = 0
-        # one prior identical tick (~0.2s) is enough; never re-process same panel
-        return self._last_hash_count >= 1 and h != self._processed_hash, h
-
     # -- main monitor tick -------------------------------------------------
     def run(self):
         try:
@@ -113,35 +93,37 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
             return  # swallow so the executor doesn't disable the task
 
     def _run(self):
-        self._tick = getattr(self, "_tick", 0) + 1
+        # No image-hash stability gate: the echo equipment page shows an
+        # animated 3D model, so the panel pixels never settle. Instead OCR each
+        # tick (the *text* is stable) and use the parsed content signature to
+        # detect a newly-selected echo.
+        self._tick += 1
         recorder = self._ensure_recorder()
-        stable, h = self._is_stable()
-        if not stable:
-            if self._tick % 25 == 0:  # ~5s heartbeat, proves run() is being called
-                self.log_info(
-                    f"[export] alive (tick {self._tick}); waiting for a stable "
-                    f"echo equipment page. frame={self.width}x{self.height}"
-                )
-            return
 
         # Full-frame OCR (absolute coords). The parser isolates the right detail
         # panel itself, anchored on the COST label, so this is resolution-robust.
         boxes = self.ocr()
         items = from_ok_boxes(boxes, self.width, self.height)
-        self._processed_hash = h
-        eq = is_equipment_page(items)
-        self.log_info(
-            f"[export] stable frame {self.width}x{self.height}: "
-            f"ocr_items={len(items)} equipment_page={eq}"
-        )
-        if not eq:
+
+        if not is_equipment_page(items):
+            if self._tick % 20 == 0:  # ~10s heartbeat
+                self.log_info(
+                    f"[export] alive (tick {self._tick}); not on echo equipment "
+                    f"page (ocr_items={len(items)}, frame={self.width}x{self.height})"
+                )
             return
 
         record = parse_equipment_frame(items)
         if record is None:
-            self.log_info("[export] equipment page but no +25 echo recorded "
-                          "(not max level, or stats not readable)")
+            if self._tick % 20 == 0:
+                self.log_info("[export] on equipment page but no +25 echo "
+                              "(not max level, or stats not readable)")
             return
+
+        sig = record.signature()
+        if sig == self._last_sig:
+            return  # same echo still displayed; nothing new
+        self._last_sig = sig
         self.log_info(
             f"[export] parsed {record.name_zh!r} echo={record.echo} "
             f"set={record.echo_set} cost={record.type} warnings={record.warnings}"
