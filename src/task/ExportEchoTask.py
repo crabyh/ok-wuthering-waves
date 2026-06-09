@@ -35,7 +35,9 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
             "auto-recorded to a JSON file importable by the optimizer."
         )
         self.icon = FluentIcon.SAVE
-        self.supported_languages = ["zh_CN", "zh_TW"]
+        # NOTE: do NOT gate on supported_languages — that filters by the OK-WW
+        # *UI* language, but this feature only needs the *game* to be in
+        # Simplified/Traditional Chinese (for OCR). Keep the task always visible.
         self.trigger_interval = 0.2
         self.default_config.update({
             "_enabled": False,
