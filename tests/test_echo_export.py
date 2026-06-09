@@ -92,6 +92,25 @@ class TestMappings(unittest.TestCase):
         self.assertEqual(mappings.lookup_echo("嚣风戏猿")["key"], "Hoochief")
         self.assertEqual(mappings.lookup_echo("抛石幼猿")["key"], "Hooscamp")
 
+    def test_ocr_junk_is_stripped(self):
+        # OCR appends UI-icon emoji / @ / progress markers / colon separators;
+        # names and sets must still resolve after cleaning to CJK-only.
+        self.assertEqual(
+            mappings.lookup_echo("共鸣回响·鸣式·虚造神型🌌")["key"],
+            "ReminiscenceThrenodianVoidborneConstruct",
+        )
+        self.assertEqual(
+            mappings.lookup_echo("共鸣回响·鸣式·利维亚坦")["key"],
+            "ReminiscenceThrenodianLeviathan",
+        )
+        self.assertEqual(mappings.lookup_echo("格洛犸图")["key"], "Glommoth")
+        self.assertEqual(mappings.lookup_echo("異相：辛吉勒姆")["key"], "Sigillum")  # colon sep
+        self.assertEqual(mappings.lookup_echo("異相目・无妄者")["key"], "Dreamless")  # 目 garble
+        self.assertEqual(
+            mappings.lookup_set("碎梦亡鬼之魇🎯（1/1)"), "ShadowofShatteredDreams"
+        )
+        self.assertEqual(mappings.lookup_set("碎梦亡鬼之魔"), "ShadowofShatteredDreams")
+
     def test_stat_percent_vs_flat(self):
         self.assertEqual(mappings.map_stat("攻击", "9.3%"), "ATK")
         self.assertEqual(mappings.map_stat("攻击", "100"), "ATK_FLAT")

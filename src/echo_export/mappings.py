@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 
 _DATA_PATH = os.path.join(os.path.dirname(__file__), "echo_data.json")
 
@@ -30,14 +31,19 @@ FLAT_CAPABLE: set[str] = set(_DATA["flat_capable"])
 # "Phantom" echoes are cosmetic recolors prefixed with 异相/異相; they are the
 # same echo as their (possibly Nightmare-prefixed) base for optimizer purposes.
 _PHANTOM_PREFIXES = ("异相", "異相")
-# Middle-dot separator variants the game/wiki/OCR use interchangeably (and OCR
-# sometimes drops entirely) — removed during normalization.
-_SEP_CHARS = "・•·･·· "
 
-# Known OCR misreads of echo-name characters (extend as new ones are observed).
+# CJK range used to strip OCR junk (emoji/icons like 🌌🎯, '@', '（1/1)', '：',
+# ASCII, the level '+25', spaces) from names before matching. In-game echo and
+# sonata names are pure CJK.
+_CJK_RE = re.compile(r"[㐀-鿿]")
+
+# Known OCR misreads of echo/set-name characters (extend as observed).
 _NAME_TEXT_FIXES = {
-    "梦魔意": "梦魇",  # 魇 sometimes OCRs as 魔意
+    "梦魔意": "梦魇",        # 魇 sometimes OCRs as 魔意
     "梦魔": "梦魇",
+    "碎梦亡鬼之魔": "碎梦亡鬼之魇",  # set: 魇 -> 魔 garble
+    "異相目": "異相",        # Phantom prefix picks up a stray 目 (icon)
+    "异相目": "异相",
 }
 
 # Echoes missing from the auto-generated wiki join (cost/sets from the
@@ -48,10 +54,21 @@ _NAME_TEXT_FIXES = {
 #      Chinese name; the exact in-game form is unverified, so if it doesn't
 #      match the parser falls back to echo=null (harmless). Fix when observed.
 _MANUAL_ECHO_ZH = {
-    # 1. confirmed in-game
+    # 1. confirmed in-game (from captured screenshots; names are CJK-only — the
+    #    parser normalizes 共鸣回响·鸣式·X etc. to this form). 鸣式 = "Threnodian".
     "共鸣回响达妮娅": {"key": "ReminiscenceDenia", "cost": 4, "sets": ["ChromaticFoam"]},
+    "共鸣回响梦魇亚当重锤": {"key": "ReminiscenceNightmareAdamSmasher", "cost": 4,
+                         "sets": ["ShadowofShatteredDreams"]},
     "共鸣回响梦魇亚当": {"key": "ReminiscenceNightmareAdamSmasher", "cost": 4,
                        "sets": ["ShadowofShatteredDreams"]},
+    "共鸣回响鸣式利维亚坦": {"key": "ReminiscenceThrenodianLeviathan", "cost": 4,
+                         "sets": ["FlamewingsShadow", "ThreadofSeveredFate"]},
+    "共鸣回响鸣式虚造神型": {"key": "ReminiscenceThrenodianVoidborneConstruct", "cost": 4,
+                         "sets": ["WishesofQuietSnowfall"]},
+    "格洛犸图": {"key": "Glommoth", "cost": 3,
+               "sets": ["TrailblazingStar", "WishesofQuietSnowfall"]},
+    # OCR sometimes truncates 嚣风戏猿 to just 戏猿 (the name region clips 嚣风).
+    "戏猿": {"key": "Hoochief", "cost": 3, "sets": ["SierraGale", "RejuvenatingGlow"]},
     # 2. high confidence (wiki Other Languages)
     "残星·重锤造匠": {"key": "FractsidusThruster", "cost": 3,
                      "sets": ["EternalRadiance", "EmpyreanAnthem"]},
@@ -74,19 +91,24 @@ _MANUAL_ECHO_ZH = {
 
 
 def _norm_name(s: str) -> str:
-    """Normalize an echo name for matching: drop separators/spaces, fix garbles."""
-    s = (s or "").strip()
+    """Normalize a name for matching: apply garble fixes then keep CJK only.
+
+    Keeping only CJK characters drops every kind of OCR junk in one step —
+    separators (·・:), the level (+25), UI-icon emoji (🌌🎯), '@', progress
+    markers like （1/1), and ASCII — which both fixes matching and removes the
+    'improper content' that breaks downstream tooling.
+    """
+    s = s or ""
     for bad, good in _NAME_TEXT_FIXES.items():
         s = s.replace(bad, good)
-    for sep in _SEP_CHARS:
-        s = s.replace(sep, "")
-    return s
+    return "".join(_CJK_RE.findall(s))
 
 
-# Separator-insensitive index so 梦魇·X / 梦魇・X / 梦魇X all match.
+# CJK-only index (separators/junk normalized away).
 # (Traditional-Chinese names are resolved separately in _exact_echo.)
 _NORM_ECHO_INDEX = {_norm_name(k): v for k, v in ECHO_BY_ZH.items()}
 _NORM_ECHO_INDEX.update({_norm_name(k): v for k, v in _MANUAL_ECHO_ZH.items()})
+_NORM_SET_INDEX = {_norm_name(k): v for k, v in SET_BY_ZH.items()}
 
 
 def _exact_echo(name: str) -> dict | None:
@@ -123,7 +145,13 @@ def lookup_echo(zh_name: str) -> dict | None:
 
 
 def lookup_set(zh_name: str) -> str | None:
-    """Return the optimizer set key for a Chinese sonata name, or None."""
+    """Return the optimizer set key for a Chinese sonata name, or None.
+
+    Normalizes to CJK-only so OCR junk (e.g. '碎梦亡鬼之魇🎯（1/1)') still matches.
+    """
+    n = _norm_name(zh_name)
+    if n in _NORM_SET_INDEX:
+        return _NORM_SET_INDEX[n]
     return SET_BY_ZH.get((zh_name or "").strip())
 
 

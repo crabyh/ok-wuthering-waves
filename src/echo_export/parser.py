@@ -22,6 +22,13 @@ MAX_LEVEL = 25
 _NUMBER_RE = re.compile(r"^[\d][\d.,]*\s*[%％]?$")
 _LEVEL_RE = re.compile(r"\+\s*(\d+)")
 _COST_RE = re.compile(r"COST\s*(\d+)", re.IGNORECASE)
+# Keep only CJK + middle-dot separators; drops OCR junk (emoji/icons 🌌🎯, '@',
+# '（1/1)', '：', the level '+25', ASCII) from displayed names/sets.
+_CLEAN_RE = re.compile(r"[㐀-鿿·・]")
+
+
+def _clean_text(s: str) -> str:
+    return "".join(_CLEAN_RE.findall(s or ""))
 
 # Page / section anchors (simplified Chinese).
 ANCHOR_PAGE = "简述"          # only present on the equipment page
@@ -233,11 +240,9 @@ def _parse_name(panel: list[OcrItem], cost_item: OcrItem) -> str:
     ]
     cands.sort(key=lambda it: it.nx)
     raw = "".join(it.clean for it in cands)
-    # at narrower resolutions OCR may merge the level into the name box, e.g.
-    # "異相·梦魇·燎照之骑+25" -> strip the trailing level token.
-    raw = _LEVEL_RE.sub("", raw)
-    raw = re.sub(r"(MAX|MX)\s*$", "", raw, flags=re.IGNORECASE)
-    return raw.strip()
+    # Keep CJK + separators only: drops the merged level (+25), UI-icon emoji,
+    # '@', progress markers, etc. that OCR appends at narrower resolutions.
+    return _clean_text(raw)
 
 
 def _stat_pairs(panel, cost_item, y_top, y_bot):
@@ -316,6 +321,6 @@ def _parse_set(panel, cost_item, sonata_item):
     for it in cands:
         key = mappings.lookup_set(it.clean)
         if key:
-            return it.clean, key
-    set_zh = cands[0].clean if cands else None
+            return _clean_text(it.clean), key
+    set_zh = _clean_text(cands[0].clean) if cands else None
     return set_zh, None
