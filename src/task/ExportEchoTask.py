@@ -156,6 +156,17 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
             notify=True,
         )
 
+    # number of immediate re-OCR attempts when a read is incomplete (the
+    # animated 3D model can transiently obscure the stat rows).
+    RETRY_ON_INCOMPLETE = 5
+
+    def _ocr_parse(self):
+        """One full-frame OCR + parse. Returns (on_equipment_page, record, n)."""
+        items = from_ok_boxes(self.ocr(), self.width, self.height)
+        if not is_equipment_page(items):
+            return False, None, len(items)
+        return True, parse_equipment_frame(items), len(items)
+
     # -- main monitor tick -------------------------------------------------
     def run(self):
         try:
@@ -173,25 +184,32 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
         self._tick += 1
         recorder = self._ensure_recorder()
 
-        # Full-frame OCR (absolute coords). The parser isolates the right detail
-        # panel itself, anchored on the COST label, so this is resolution-robust.
-        boxes = self.ocr()
-        items = from_ok_boxes(boxes, self.width, self.height)
-
-        if not is_equipment_page(items):
-            if self._tick % 20 == 0:  # ~10s heartbeat
+        on_page, record, n_items = self._ocr_parse()
+        if not on_page:
+            if self._tick % 20 == 0:  # ~heartbeat
                 self.log_info(
                     f"[export] alive (tick {self._tick}); not on echo equipment "
-                    f"page (ocr_items={len(items)}, frame={self.width}x{self.height})"
+                    f"page (ocr_items={n_items}, frame={self.width}x{self.height})"
                 )
             return
 
-        record = parse_equipment_frame(items)
         if record is None:
             if self._tick % 20 == 0:
                 self.log_info("[export] on equipment page but no +25 echo "
-                              "(not max level, or stats not readable)")
+                              "(not max level, or mid-load)")
             return
+
+        # Incomplete read (e.g. the 3D model is covering the main-stat rows):
+        # skip this frame and immediately re-OCR a few fresh frames — the model
+        # animates, so the stats usually become readable within a moment.
+        if not record.is_recognized:
+            for _ in range(self.RETRY_ON_INCOMPLETE):
+                self.next_frame()
+                self.sleep(0.06)
+                _, retry_rec, _ = self._ocr_parse()
+                if retry_rec is not None and retry_rec.is_recognized:
+                    record = retry_rec
+                    break
 
         sig = record.signature()
         if sig == self._last_sig:
