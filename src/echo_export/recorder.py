@@ -54,13 +54,20 @@ class EchoRecorder:
     def is_new(self, record: EchoRecord) -> bool:
         return record.signature() not in self._seen
 
-    def add(self, record: EchoRecord) -> bool:
-        """Add a record if unseen. Returns True if newly added."""
+    def add(self, record: EchoRecord, screenshot: str | None = None) -> bool:
+        """Add a record if unseen. Returns True if newly added.
+
+        ``screenshot`` is the path of this echo's screenshot (relative to the
+        output dir); stored on the entry so each echo JSON maps 1:1 to its image.
+        """
         sig = record.signature()
         if sig in self._seen:
             return False
         self._seen.add(sig)
-        self._records.append(record.to_optimizer_dict())
+        d = record.to_optimizer_dict()
+        if screenshot:
+            d["screenshot"] = screenshot
+        self._records.append(d)
         if self.out_path:
             self.save()
         return True

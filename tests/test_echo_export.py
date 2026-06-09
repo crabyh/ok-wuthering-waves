@@ -187,6 +187,19 @@ class TestRecorder(unittest.TestCase):
         self.assertFalse(r.add(rec2))  # identical content -> deduped
         self.assertEqual(len(r), 1)
 
+    def test_screenshot_name_stable_and_linked(self):
+        rec = parse_equipment_frame(spearback_items())
+        name = rec.screenshot_name()
+        self.assertTrue(name.endswith(".png"))
+        self.assertIn("Spearback", name)
+        # stable: same echo content -> same filename (no duplicate screenshots)
+        self.assertEqual(name, parse_equipment_frame(spearback_items()).screenshot_name())
+        r = EchoRecorder()
+        r.add(rec, screenshot="echo_export_screenshots/" + name)
+        self.assertEqual(r.to_list()[0]["screenshot"], "echo_export_screenshots/" + name)
+        # the extra 'screenshot' field must not break reload de-dup
+        self.assertFalse(r.is_new(parse_equipment_frame(spearback_items())))
+
     def test_dedup_persists_across_reload(self):
         import os
         import tempfile

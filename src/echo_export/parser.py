@@ -82,6 +82,17 @@ class EchoRecord:
         """
         return signature_from_dict(self.to_optimizer_dict())
 
+    def screenshot_name(self) -> str:
+        """Stable ASCII screenshot filename, 1:1 with the echo's content.
+
+        Derived from the content signature, so the same echo always maps to the
+        same file — re-encountering it never creates a second screenshot.
+        """
+        import hashlib
+        h = hashlib.md5(repr(self.signature()).encode("utf-8")).hexdigest()[:8]
+        base = re.sub(r"[^A-Za-z0-9]+", "", self.echo or "unknown") or "unknown"
+        return f"{base}_cost{self.type}_{h}.png"
+
 
 def signature_from_dict(d: dict) -> tuple:
     """De-dup signature from an optimizer echo dict (for loading existing JSON)."""

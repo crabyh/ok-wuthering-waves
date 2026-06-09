@@ -43,12 +43,12 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
         self.default_config.update({
             "_enabled": False,
             "Output File": "echoes_export.json",
-            "Save Screenshots": False,
+            "Save Screenshots": True,
         })
         self.config_description = {
             "Output File": "导出文件路径 / path of the exported JSON file",
-            "Save Screenshots": "保存每个已识别声骸的截图(用于构建测试样本) / "
-            "also save a screenshot of every recognized echo (for building test fixtures)",
+            "Save Screenshots": "为每个声骸保存一张截图(与JSON一一对应) / "
+            "save one screenshot per echo, linked from each JSON entry",
         }
         self._recorder = None
         self._out_path = None
@@ -71,32 +71,12 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
             self._shot_dir = os.path.join(
                 os.path.dirname(out), "echo_export_screenshots"
             )
-            # continue numbering from existing files so re-runs don't overwrite
-            # screenshots from a previous session.
-            self._unknown_count = self._count_pngs(self._unknown_dir)
-            self._shot_count = self._count_pngs(self._shot_dir)
+            self._unknown_count = 0
             self.info_set("Output", self._out_path)
             self.info_set("Recorded", len(self._recorder))
             self.info_set("Unrecognized", 0)
             self.info_set("Status", "monitoring")
         return self._recorder
-
-    @staticmethod
-    def _count_pngs(folder) -> int:
-        try:
-            return len([f for f in os.listdir(folder) if f.lower().endswith(".png")])
-        except OSError:
-            return 0
-
-    @staticmethod
-    def _safe(part) -> str:
-        """ASCII-only filename fragment.
-
-        Chinese/■ characters in filenames cause trouble (downstream tooling,
-        cross-platform, OCR pipelines), so filenames stay pure ASCII; the full
-        Chinese names are preserved in the sidecar index.jsonl instead.
-        """
-        return re.sub(r"[^A-Za-z0-9]+", "", str(part)) if part not in (None, "") else ""
 
     def _append_index(self, folder, fname, record):
         """Append the parsed details (incl. CJK names) for a saved screenshot."""
@@ -126,44 +106,21 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
             f.write(buf.tobytes())
         return True
 
-    def _save_screenshot(self, record):
-        """Save the full frame of a recognized echo (for test fixtures).
-
-        Filename is ASCII-only (echo key/set are English); the Chinese names go
-        into index.jsonl.
-        """
-        os.makedirs(self._shot_dir, exist_ok=True)
-        self._shot_count += 1
-        fname = "_".join(filter(None, (
-            f"{self._shot_count:03d}", self._safe(record.echo),
-            self._safe(record.echo_set), f"cost{record.type}"))) + ".png"
-        path = os.path.join(self._shot_dir, fname)
-        self._imwrite(path, self.frame)
-        self._append_index(self._shot_dir, fname, record)
-        self.log_info(f"[export] saved screenshot {path}")
-
-    def _save_unrecognized(self, record):
-        """Save the full frame for an echo we couldn't fully map, for later.
-
-        Filename stays ASCII (counter + any recognized set + cost); the Chinese
-        name/set we *did* read are written to index.jsonl so the echo is
-        identifiable when filling in the mapping.
-        """
-        os.makedirs(self._unknown_dir, exist_ok=True)
-        self._unknown_count += 1
-        fname = "_".join(filter(None, (
-            f"{self._unknown_count:03d}", self._safe(record.echo_set),
-            f"cost{record.type}"))) + ".png"
-        path = os.path.join(self._unknown_dir, fname)
-        self._imwrite(path, self.frame)
-        self._append_index(self._unknown_dir, fname, record)
-        self.info_set("Unrecognized", self._unknown_count)
-        self.log_info(
-            f"unrecognized echo #{self._unknown_count} saved {path}: "
-            f"name={record.name_zh!r} set={record.set_zh!r}->{record.echo_set}; "
-            f"warnings={record.warnings}",
-            notify=True,
-        )
+    def _save_image(self, record):
+        """Save ONE screenshot for this echo (stable, content-derived name) and
+        return its path relative to the output dir, for the JSON 'screenshot'
+        field. Recognized echoes go to echo_export_screenshots/, unrecognized to
+        echo_export_unrecognized/. Returns None if recognized-screenshots are
+        disabled. Stable names mean re-encounters overwrite the same file."""
+        recognized = record.is_recognized
+        if recognized and not self.config.get("Save Screenshots", True):
+            return None
+        folder = self._shot_dir if recognized else self._unknown_dir
+        os.makedirs(folder, exist_ok=True)
+        fname = record.screenshot_name()
+        self._imwrite(os.path.join(folder, fname), self.frame)
+        self._append_index(folder, fname, record)
+        return os.path.join(os.path.basename(folder), fname).replace("\\", "/")
 
     # number of immediate re-OCR attempts when a read is incomplete (the
     # animated 3D model can transiently obscure the stat rows).
@@ -229,22 +186,22 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
             f"set={record.echo_set} cost={record.type} warnings={record.warnings}"
         )
 
-        if recorder.add(record):
-            self.info_set("Recorded", len(recorder))
-            tag = "NEW" if record.is_recognized else "NEW (unrecognized)"
-            self.info_set("Last", f"{record.name_zh} ({record.echo}) {tag}")
-            self.log_info(
-                f"recorded echo #{len(recorder)}: {record.name_zh} -> "
-                f"{record.echo} {record.echo_set} cost{record.type}",
-                notify=True,
-            )
-            # Save a screenshot of anything we couldn't fully map (unknown echo
-            # name, unknown sonata set, or stat warnings) so we can resolve the
-            # mapping later from the image.
-            if not record.is_recognized:
-                self._save_unrecognized(record)
-            elif self.config.get("Save Screenshots"):
-                self._save_screenshot(record)
-            return True
-        else:
+        if not recorder.is_new(record):
             self.info_set("Last", f"{record.name_zh} (already recorded)")
+            return
+
+        # New echo: save exactly one screenshot and link it from the JSON entry.
+        shot = self._save_image(record)
+        recorder.add(record, screenshot=shot)
+        self.info_set("Recorded", len(recorder))
+        if not record.is_recognized:
+            self._unknown_count += 1
+            self.info_set("Unrecognized", self._unknown_count)
+        tag = "NEW" if record.is_recognized else "NEW (unrecognized)"
+        self.info_set("Last", f"{record.name_zh} ({record.echo}) {tag}")
+        self.log_info(
+            f"recorded echo #{len(recorder)}: {record.name_zh} -> {record.echo} "
+            f"{record.echo_set} cost{record.type} shot={shot}",
+            notify=True,
+        )
+        return True
