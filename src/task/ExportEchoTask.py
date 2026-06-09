@@ -1,5 +1,6 @@
 # ExportEchoTask.py
 import os
+import re
 
 import cv2
 import numpy as np
@@ -55,10 +56,32 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
         if self._recorder is None or out != self._out_path:
             self._out_path = out
             self._recorder = EchoRecorder(out_path=out)
+            # screenshots of echoes whose zh name/set we can't map yet, so the
+            # mapping can be filled in later from these images.
+            self._unknown_dir = os.path.join(
+                os.path.dirname(out), "echo_export_unrecognized"
+            )
+            self._unknown_count = 0
             self.info_set("Output", self._out_path)
             self.info_set("Recorded", 0)
+            self.info_set("Unrecognized", 0)
             self.info_set("Status", "monitoring")
         return self._recorder
+
+    def _save_unrecognized(self, record):
+        """Save the full frame for an echo we couldn't fully map, for later."""
+        os.makedirs(self._unknown_dir, exist_ok=True)
+        self._unknown_count += 1
+        safe = re.sub(r'[<>:"/\\|?*]', "", record.name_zh or "unknown") or "unknown"
+        path = os.path.join(self._unknown_dir, f"{self._unknown_count:03d}_{safe}.png")
+        cv2.imwrite(path, self.frame)
+        self.info_set("Unrecognized", self._unknown_count)
+        self.log_info(
+            f"unrecognized echo saved for later mapping: {record.name_zh!r} "
+            f"(echo={record.echo}, set={record.set_zh}->{record.echo_set}); "
+            f"warnings={record.warnings}; saved {path}",
+            notify=True,
+        )
 
     # -- stable-frame detection (cheap, no OCR) ----------------------------
     def _panel_hash(self):
@@ -96,17 +119,20 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
         if record is None:
             return  # not a usable +25 echo panel
 
-        if record.warnings:
-            self.log_info(f"echo parse warnings {record.name_zh}: {record.warnings}")
-
         if recorder.add(record):
             self.info_set("Recorded", len(recorder))
-            self.info_set("Last", f"{record.name_zh} ({record.echo}) NEW")
+            tag = "NEW" if record.is_recognized else "NEW (unrecognized)"
+            self.info_set("Last", f"{record.name_zh} ({record.echo}) {tag}")
             self.log_info(
                 f"recorded echo #{len(recorder)}: {record.name_zh} -> "
                 f"{record.echo} {record.echo_set} cost{record.type}",
                 notify=True,
             )
+            # Save a screenshot of anything we couldn't fully map (unknown echo
+            # name, unknown sonata set, or stat warnings) so we can resolve the
+            # mapping later from the image.
+            if not record.is_recognized:
+                self._save_unrecognized(record)
             return True
         else:
             self.info_set("Last", f"{record.name_zh} (already recorded)")
