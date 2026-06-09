@@ -105,9 +105,23 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
 
     # -- main monitor tick -------------------------------------------------
     def run(self):
+        try:
+            return self._run()
+        except Exception as e:
+            import traceback
+            self.log_error(f"[export] run() error: {e}\n{traceback.format_exc()}")
+            return  # swallow so the executor doesn't disable the task
+
+    def _run(self):
+        self._tick = getattr(self, "_tick", 0) + 1
         recorder = self._ensure_recorder()
         stable, h = self._is_stable()
         if not stable:
+            if self._tick % 25 == 0:  # ~5s heartbeat, proves run() is being called
+                self.log_info(
+                    f"[export] alive (tick {self._tick}); waiting for a stable "
+                    f"echo equipment page. frame={self.width}x{self.height}"
+                )
             return
 
         # Full-frame OCR (absolute coords). The parser isolates the right detail
