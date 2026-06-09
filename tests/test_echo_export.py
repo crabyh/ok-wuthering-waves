@@ -113,6 +113,8 @@ class TestMappings(unittest.TestCase):
         self.assertEqual(mappings.lookup_echo("角")["key"], "Jué")  # accented key
         self.assertEqual(mappings.lookup_echo("異相・异构武装")["key"], "SentryConstruct")
         self.assertEqual(mappings.lookup_echo("阿磁磁")["key"], "ZigZag")  # 嗞->磁 OCR
+        # base Kronaclaw absent from optimizer -> stopgap to ReminiscenceKronaclaw
+        self.assertEqual(mappings.lookup_echo("异相·冠顶苍隼")["key"], "ReminiscenceKronaclaw")
 
     def test_substat_value_sign_stripped(self):
         # OCR sometimes prefixes a substat value with a stray sign ('-7.9%').

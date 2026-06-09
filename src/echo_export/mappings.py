@@ -78,6 +78,10 @@ _MANUAL_ECHO_ZH = {
     "嚣风戏猿": {"key": "Hoochief", "cost": 3, "sets": ["SierraGale", "RejuvenatingGlow"]},
     "抛石幼猿": {"key": "Hooscamp", "cost": 1, "sets": ["SierraGale", "LingeringTunes"]},
     "异构武装": {"key": "SentryConstruct", "cost": 4, "sets": ["FrostyResolve"]},
+    # The optimizer has no base "Kronaclaw" (only ReminiscenceKronaclaw) — likely
+    # an optimizer gap; map the base/Phantom 冠顶苍隼 to it for now. cost/set match.
+    "冠顶苍隼": {"key": "ReminiscenceKronaclaw", "cost": 3,
+              "sets": ["TrailblazingStar", "ChromaticFoam"]},
     # 3. best-effort (共鸣回响 + boss wiki zh; in-game form unverified)
     "共鸣回响芬莱克麦克白": {"key": "ReminiscenceFenrico", "cost": 4,
                           "sets": ["DreamoftheLost", "LawofHarmony"]},
