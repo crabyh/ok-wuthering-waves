@@ -37,7 +37,9 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
         # NOTE: do NOT gate on supported_languages — that filters by the OK-WW
         # *UI* language, but this feature only needs the *game* to be in
         # Simplified/Traditional Chinese (for OCR). Keep the task always visible.
-        self.trigger_interval = 0.5
+        # minimum gap between ticks; OCR time dominates. content dedup makes
+        # frequent ticks harmless, so keep it responsive.
+        self.trigger_interval = 0.1
         self.default_config.update({
             "_enabled": False,
             "Output File": "echoes_export.json",
