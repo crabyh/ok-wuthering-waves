@@ -79,22 +79,48 @@ class ExportEchoTask(TriggerTask, BaseWWTask):
             self.info_set("Status", "monitoring")
         return self._recorder
 
+    @staticmethod
+    def _safe(part) -> str:
+        """Filename-safe fragment (strips illegal chars + whitespace; keeps CJK)."""
+        return re.sub(r'[<>:"/\\|?*\s]+', "", str(part if part not in (None, "") else "_"))
+
+    def _imwrite(self, path, frame) -> bool:
+        """Write a PNG, supporting non-ASCII (Chinese) paths on Windows.
+
+        cv2.imwrite silently fails on unicode paths on Windows; encode then write
+        the bytes ourselves instead.
+        """
+        ok_, buf = cv2.imencode(".png", frame)
+        if not ok_:
+            return False
+        with open(path, "wb") as f:
+            f.write(buf.tobytes())
+        return True
+
     def _save_screenshot(self, record):
         """Save the full frame of a recognized echo (for test fixtures)."""
         os.makedirs(self._shot_dir, exist_ok=True)
         self._shot_count += 1
-        safe = re.sub(r'[<>:"/\\|?*]', "", record.echo or record.name_zh or "echo")
-        path = os.path.join(self._shot_dir, f"{self._shot_count:03d}_{safe}.png")
-        cv2.imwrite(path, self.frame)
+        name = "_".join(self._safe(p) for p in (
+            f"{self._shot_count:03d}", record.echo, record.name_zh,
+            record.echo_set, f"cost{record.type}"))
+        path = os.path.join(self._shot_dir, f"{name}.png")
+        self._imwrite(path, self.frame)
         self.log_info(f"[export] saved screenshot {path}")
 
     def _save_unrecognized(self, record):
-        """Save the full frame for an echo we couldn't fully map, for later."""
+        """Save the full frame for an echo we couldn't fully map, for later.
+
+        The name encodes what we *did* read (cleaned zh name, set, cost) so the
+        echo is identifiable at a glance when filling in the mapping.
+        """
         os.makedirs(self._unknown_dir, exist_ok=True)
         self._unknown_count += 1
-        safe = re.sub(r'[<>:"/\\|?*]', "", record.name_zh or "unknown") or "unknown"
-        path = os.path.join(self._unknown_dir, f"{self._unknown_count:03d}_{safe}.png")
-        cv2.imwrite(path, self.frame)
+        name = "_".join(self._safe(p) for p in (
+            f"{self._unknown_count:03d}", record.name_zh or "unknown",
+            record.echo_set or record.set_zh, f"cost{record.type}"))
+        path = os.path.join(self._unknown_dir, f"{name}.png")
+        self._imwrite(path, self.frame)
         self.info_set("Unrecognized", self._unknown_count)
         self.log_info(
             f"unrecognized echo saved for later mapping: {record.name_zh!r} "
