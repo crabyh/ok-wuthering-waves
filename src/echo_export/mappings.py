@@ -44,6 +44,7 @@ _NAME_TEXT_FIXES = {
     "碎梦亡鬼之魔": "碎梦亡鬼之魇",  # set: 魇 -> 魔 garble
     "異相目": "異相",        # Phantom prefix picks up a stray 目 (icon)
     "异相目": "异相",
+    "阿磁磁": "阿嗞嗞",       # Zig Zag: 嗞 OCRs as the near-identical 磁
 }
 
 # Echoes missing from the auto-generated wiki join (cost/sets from the
@@ -76,6 +77,7 @@ _MANUAL_ECHO_ZH = {
                      "sets": ["EternalRadiance", "EmpyreanAnthem"]},
     "嚣风戏猿": {"key": "Hoochief", "cost": 3, "sets": ["SierraGale", "RejuvenatingGlow"]},
     "抛石幼猿": {"key": "Hooscamp", "cost": 1, "sets": ["SierraGale", "LingeringTunes"]},
+    "异构武装": {"key": "SentryConstruct", "cost": 4, "sets": ["FrostyResolve"]},
     # 3. best-effort (共鸣回响 + boss wiki zh; in-game form unverified)
     "共鸣回响芬莱克麦克白": {"key": "ReminiscenceFenrico", "cost": 4,
                           "sets": ["DreamoftheLost", "LawofHarmony"]},

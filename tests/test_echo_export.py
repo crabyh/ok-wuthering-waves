@@ -111,6 +111,15 @@ class TestMappings(unittest.TestCase):
         )
         self.assertEqual(mappings.lookup_set("碎梦亡鬼之魔"), "ShadowofShatteredDreams")
         self.assertEqual(mappings.lookup_echo("角")["key"], "Jué")  # accented key
+        self.assertEqual(mappings.lookup_echo("異相・异构武装")["key"], "SentryConstruct")
+        self.assertEqual(mappings.lookup_echo("阿磁磁")["key"], "ZigZag")  # 嗞->磁 OCR
+
+    def test_substat_value_sign_stripped(self):
+        # OCR sometimes prefixes a substat value with a stray sign ('-7.9%').
+        from src.echo_export.parser import parse_value, _is_number
+        self.assertTrue(_is_number("-7.9%"))
+        self.assertEqual(parse_value("-7.9%"), 7.9)
+        self.assertEqual(parse_value("+30"), 30.0)
 
     def test_stat_percent_vs_flat(self):
         self.assertEqual(mappings.map_stat("攻击", "9.3%"), "ATK")
@@ -140,6 +149,13 @@ class TestParser(unittest.TestCase):
         items = [it for it in spearback_items() if it.clean != "+25"]
         items.append(item("+20", 0.943, 0.141))
         self.assertIsNone(parse_equipment_frame(items))
+
+    def test_skips_partially_loaded_panel(self):
+        # missing the bottom anchors (声骸技能 / 合鸣效果) => captured mid-load => skip
+        no_skill = [it for it in spearback_items() if it.clean != "声骸技能"]
+        self.assertIsNone(parse_equipment_frame(no_skill))
+        no_sonata = [it for it in spearback_items() if it.clean != "合鸣效果"]
+        self.assertIsNone(parse_equipment_frame(no_sonata))
 
     def test_recognized_record_has_no_warnings(self):
         rec = parse_equipment_frame(spearback_items())

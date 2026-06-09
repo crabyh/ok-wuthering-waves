@@ -19,7 +19,7 @@ from src.echo_export.ocr_items import OcrItem
 MAX_LEVEL = 25
 
 # A numeric stat value, e.g. "30.0%", "100", "1,234", "9.3%".
-_NUMBER_RE = re.compile(r"^[\d][\d.,]*\s*[%％]?$")
+_NUMBER_RE = re.compile(r"^[+\-]?[\d][\d.,]*\s*[%％]?$")
 _LEVEL_RE = re.compile(r"\+\s*(\d+)")
 _COST_RE = re.compile(r"COST\s*(\d+)", re.IGNORECASE)
 # Keep only CJK + middle-dot separators; drops OCR junk (emoji/icons 🌌🎯, '@',
@@ -86,7 +86,10 @@ class EchoRecord:
 
 
 def parse_value(value_str: str) -> float:
+    # substat values are positive; OCR sometimes prefixes a stray '-'/'+' (the
+    # substat bullet read as a sign), so strip leading signs.
     s = value_str.replace("％", "%").replace("%", "").replace(",", "").strip()
+    s = s.lstrip("+-").strip()
     try:
         return float(s)
     except ValueError:
@@ -140,6 +143,13 @@ def parse_equipment_frame(items: list[OcrItem]) -> EchoRecord | None:
 
     skill_item = _find(panel, ANCHOR_SKILL)
     sonata_item = _find(panel, ANCHOR_SONATA)
+
+    # Readiness gate: 声骸技能 and 合鸣效果 sit BELOW the stat block, so their
+    # presence means the panel finished rendering and the stat rows above them
+    # are loaded. If either is missing the frame was captured mid-load — skip it
+    # and let the next tick catch the fully-rendered panel.
+    if skill_item is None or sonata_item is None:
+        return None
 
     warnings: list[str] = []
 
